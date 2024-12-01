@@ -25,8 +25,10 @@ export default function App() {
     const savedCurrentStreak = localStorage.getItem("currentStreak");
     const savedHighestStreak = localStorage.getItem("highestStreak");
 
-    if (savedCurrentStreak) setCurrentStreak(parseInt(savedCurrentStreak, 10));
-    if (savedHighestStreak) setHighestStreak(parseInt(savedHighestStreak, 10));
+    if (savedCurrentStreak)
+      setCurrentStreak(parseInt(savedCurrentStreak, 10));
+    if (savedHighestStreak)
+      setHighestStreak(parseInt(savedHighestStreak, 10));
   }, []);
 
   // Aggiorna il font al caricamento della pagina
@@ -41,7 +43,7 @@ export default function App() {
   }, [currentStreak, highestStreak]);
 
   // Funzione per cambiare font e aggiornare le streak
-  const handleChangeFont = () => {
+  const handleGuess = () => {
     setCurrentFont(getRandomFont());
     setCurrentStreak((prev) => {
       const newStreak = prev + 1;
@@ -101,16 +103,16 @@ export default function App() {
 
   return (
     <>
-      {loading && <PageLoader />}
+      {/* {loading && <PageLoader />} */}
       <div
-        className={`bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"
-          }`}
+        // className={`bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"
+        className={"bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500"}
       >
         <div className="grid gap-28 w-1/2 max-w-4xl">
           <Title />
           <div className="grid gap-12">
             <div
-              className="bg-custom-black border-2 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
+              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
               style={{ fontFamily: currentFont }}
             >
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
@@ -118,10 +120,10 @@ export default function App() {
             </div>
             <div className="flex gap-2">
               <Input />
-              <Button onClick={handleChangeFont} />
+              <Button onClick={handleGuess} />
             </div>
           </div>
-          <div className="grid gap-4 text-xl text-white">
+          <div className="grid gap-4 text-xl text-white justify-center">
             <div>
               Current streak: {currentStreak}
             </div>

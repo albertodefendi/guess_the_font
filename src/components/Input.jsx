@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import fonts from "../assets/google_fonts_list.json";
 import Button from "./Button";
 
-
-
 //--------------------------------------------------//
 // Export default
 //--------------------------------------------------//

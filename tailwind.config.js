@@ -10,6 +10,9 @@ export default {
         "custom-green": "#00ce7c",
         "custom-black": "#181c18",
         "custom-black-1": "#222222"
+      },
+      fontFamily: {
+        sans: ["Parkinsans", "ui-sans-serif", "system-ui"]
       }
     },
   },
