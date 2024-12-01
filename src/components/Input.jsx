@@ -88,35 +88,32 @@ export default function FontInput() {
     }, [highlightedIndex]);
 
     return (
-        <div className="w-full flex justify-center gap-2 text-2xl">
-            <div className="w-full">
-                <input
-                    className="w-full bg-custom-black text-white p-4 rounded-lg"
-                    ref={inputRef}
-                    type="text"
-                    value={query}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="What's the font?"
-                />
-                {suggestions.length > 0 && (
-                    <ul
-                        ref={listRef}
-                        className="max-h-64 overflow-y-scroll z-50 rounded-lg"
-                    >
-                        {suggestions.map((suggestion, index) => (
-                            <li
-                                className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
-                                key={index}
-                                onClick={() => handleSuggestionClick(suggestion)}
-                            >
-                                {suggestion}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-            <Button></Button>
+        <div className="w-full flex flex-col justify-center gap-2 text-2xl">
+            <input
+                className="w-full bg-custom-black text-white p-4 rounded-lg"
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="What's the font?"
+            />
+            {suggestions.length > 0 && (
+                <ul
+                    ref={listRef}
+                    className="max-h-64 overflow-y-scroll z-50 rounded-lg"
+                >
+                    {suggestions.map((suggestion, index) => (
+                        <li
+                            className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
+                            key={index}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                            {suggestion}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
