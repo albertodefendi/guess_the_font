@@ -25,7 +25,7 @@ export default function FontChanger() {
                 newFonts[randomIndex] = getRandomFont(); // Cambia solo il font di una lettera
                 return newFonts;
             });
-        }, 4000); // Cambia ogni 4 secondi
+        }, 3000); // Cambia ogni 3 secondi
 
         // Pulisce l'intervallo quando il componente viene smontato
         return () => clearInterval(interval);
@@ -39,14 +39,24 @@ export default function FontChanger() {
     return (
         <h1 className="text-7xl text-white text-center">
             {text.split("").map((letter, index) => (
-                <span
-                    key={index}
-                    className="mx-1"
-                    style={{ fontFamily: fontsPerLetter[index] }}
-                >
-                    {letter}
-                </span>
+                letter === " " ? (
+                    <span
+                        key={index}
+                        className="mx-1"
+                    >
+                        {letter}
+                    </span>
+                ) : (
+                    <span
+                        key={index}
+                        className="mx-1 text-custom-green"
+                        style={{ fontFamily: fontsPerLetter[index] }}
+                    >
+                        {letter}
+                    </span>
+                )
             ))}
         </h1>
     );
+
 };

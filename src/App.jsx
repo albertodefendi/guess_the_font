@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import fonts from "./assets/google_fonts_list.json";
 import Input from "./components/Input";
 import Title from "./components/Title";
+import Text from "./components/Text";
 
 //--------------------------------------------------//
 // Export default
@@ -29,9 +30,7 @@ export default function App() {
         <div className="grid gap-28 w-1/2 max-w-4xl">
           <Title />
           <div className="grid gap-12">
-            <div className="bg-white w-full rounded-3xl p-8 text-3xl text-center">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!
-            </div>
+            <Text></Text>
             <Input />
           </div>
         </div>

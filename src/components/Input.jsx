@@ -89,22 +89,22 @@ export default function FontInput() {
     return (
         <div className="w-full flex flex-col items-center text-2xl">
             <input
-                className="bg-white text-black w-1/2 p-3 rounded-lg"
+                className="bg-custom-black text-white w-1/2 p-3 rounded-lg"
                 ref={inputRef}
                 type="text"
                 value={query}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Guess the font"
+                placeholder="What's the font?"
             />
             {suggestions.length > 0 && (
                 <ul
                     ref={listRef}
-                    className="max-h-56 w-1/2 overflow-y-scroll z-50"
+                    className="max-h-56 w-1/2 overflow-y-scroll z-50 rounded-lg"
                 >
                     {suggestions.map((suggestion, index) => (
                         <li
-                            className={`p-3 cursor-pointer ${index === highlightedIndex ? "bg-emerald-100" : index % 2 === 0 ? "bg-slate-100" : "bg-white"}`}
+                            className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
                         >
