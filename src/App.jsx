@@ -9,6 +9,8 @@ import Button from "./components/Button";
 export default function App() {
   const [loading, setLoading] = useState(true); // Stato per il caricamento
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
+  const [currentStreak, setCurrentStreak] = useState(0); // Stato per la streak attuale
+  const [highestStreak, setHighestStreak] = useState(0); // Stato per la streak massima
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
@@ -18,16 +20,39 @@ export default function App() {
     return fontsArray[randomIndex];
   };
 
-  // Cambia il font al caricamento della pagina
+  // Inizializza le streak da localStorage
+  useEffect(() => {
+    const savedCurrentStreak = localStorage.getItem("currentStreak");
+    const savedHighestStreak = localStorage.getItem("highestStreak");
+
+    if (savedCurrentStreak) setCurrentStreak(parseInt(savedCurrentStreak, 10));
+    if (savedHighestStreak) setHighestStreak(parseInt(savedHighestStreak, 10));
+  }, []);
+
+  // Aggiorna il font al caricamento della pagina
   useEffect(() => {
     setCurrentFont(getRandomFont());
   }, []);
 
-  // Cambia il font al clic del pulsante
+  // Aggiorna localStorage quando le streak cambiano
+  useEffect(() => {
+    localStorage.setItem("currentStreak", currentStreak);
+    localStorage.setItem("highestStreak", highestStreak);
+  }, [currentStreak, highestStreak]);
+
+  // Funzione per cambiare font e aggiornare le streak
   const handleChangeFont = () => {
     setCurrentFont(getRandomFont());
+    setCurrentStreak((prev) => {
+      const newStreak = prev + 1;
+      if (newStreak > highestStreak) {
+        setHighestStreak(newStreak);
+      }
+      return newStreak;
+    });
   };
 
+  // Gestione del caricamento dei font
   useEffect(() => {
     const loadFonts = () => {
       let loadedCount = 0; // Conta i font caricati
@@ -94,6 +119,14 @@ export default function App() {
             <div className="flex gap-2">
               <Input />
               <Button onClick={handleChangeFont} />
+            </div>
+          </div>
+          <div className="grid gap-4 text-xl text-white">
+            <div>
+              Current streak: {currentStreak}
+            </div>
+            <div>
+              Highest streak: {highestStreak}
             </div>
           </div>
         </div>
