@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import fonts from "../../public/google_fonts_list.json";
 
+
+
+//--------------------------------------------------//
+// Export default
+//--------------------------------------------------//
+
 // Array dei nomi dei font estratto dal JSON
 const fontsArray = fonts.fonts.map((font) => font.name);
 
@@ -81,52 +87,26 @@ export default function FontInput() {
     }, [highlightedIndex]);
 
     return (
-        <div style={{ position: "relative", width: "300px" }}>
+        <div className="w-full flex flex-col items-center text-2xl">
             <input
+                className="bg-white text-black w-1/2 p-3 rounded-lg"
                 ref={inputRef}
                 type="text"
                 value={query}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Guess the font"
-                style={{
-                    width: "100%",
-                    padding: "8px",
-                    fontSize: "16px",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                }}
             />
             {suggestions.length > 0 && (
                 <ul
                     ref={listRef}
-                    style={{
-                        position: "absolute",
-                        top: "40px",
-                        left: 0,
-                        width: "100%",
-                        listStyleType: "none",
-                        margin: 0,
-                        padding: 0,
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                        backgroundColor: "#fff",
-                        zIndex: 1000,
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                        maxHeight: "200px", // Mostra solo 5 elementi (40px * 5)
-                        overflowY: "auto", // Abilita lo scroll
-                    }}
+                    className="max-h-56 w-1/2 overflow-y-scroll z-50"
                 >
                     {suggestions.map((suggestion, index) => (
                         <li
+                            className={`p-3 cursor-pointer ${index === highlightedIndex ? "bg-emerald-100" : index % 2 === 0 ? "bg-slate-100" : "bg-white"}`}
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            style={{
-                                padding: "8px",
-                                cursor: "pointer",
-                                backgroundColor:
-                                    index === highlightedIndex ? "#e6f7ff" : index % 2 === 0 ? "#f9f9f9" : "#fff",
-                            }}
                         >
                             {suggestion}
                         </li>
