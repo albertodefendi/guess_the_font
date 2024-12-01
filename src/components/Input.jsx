@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import fonts from "../../public/google_fonts_list.json";
+import fonts from "../assets/google_fonts_list.json";
 
 
 
