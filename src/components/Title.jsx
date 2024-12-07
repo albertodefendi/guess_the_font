@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fonts from "../assets/google_fonts_list.json"; // Importa il JSON con i font
+import fonts from "../assets/google_fonts_list.json";
 
 //--------------------------------------------------//
 // Export default

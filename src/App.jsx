@@ -1,10 +1,9 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import fonts from "./assets/google_fonts_list.json";
-import Input from "./components/Input";
 import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
-import Button from "./components/Button";
+import GuessSection from "./components/GuessSection";
 
 export default function App() {
   const [loading, setLoading] = useState(true); // Stato per il caricamento
@@ -25,9 +24,9 @@ export default function App() {
     const savedCurrentStreak = localStorage.getItem("currentStreak");
     const savedHighestStreak = localStorage.getItem("highestStreak");
 
-    if (savedCurrentStreak)
+    if (savedCurrentStreak) 
       setCurrentStreak(parseInt(savedCurrentStreak, 10));
-    if (savedHighestStreak)
+    if (savedHighestStreak) 
       setHighestStreak(parseInt(savedHighestStreak, 10));
   }, []);
 
@@ -43,15 +42,21 @@ export default function App() {
   }, [currentStreak, highestStreak]);
 
   // Funzione per cambiare font e aggiornare le streak
-  const handleGuess = () => {
+  const handleGuess = (value) => {
+    if (value == currentFont) {
+      setCurrentStreak((prev) => {
+        const newStreak = prev + 1;
+        setCurrentStreak(newStreak);
+        if (newStreak > highestStreak) {
+          setHighestStreak(newStreak);
+        }
+        return newStreak;
+      });
+    }
+    else {
+      setCurrentStreak(0)
+    }
     setCurrentFont(getRandomFont());
-    setCurrentStreak((prev) => {
-      const newStreak = prev + 1;
-      if (newStreak > highestStreak) {
-        setHighestStreak(newStreak);
-      }
-      return newStreak;
-    });
   };
 
   // Gestione del caricamento dei font
@@ -65,7 +70,7 @@ export default function App() {
         link.href = `https://fonts.googleapis.com/css2?family=${font.name.replace(
           /\s+/g,
           "+"
-        )}:wght@400&display=swap`; // Corretto uso della regex per spazi multipli
+        )}:wght@400&display=swap`;
         link.rel = "stylesheet";
 
         // Verifica il caricamento del font
@@ -105,8 +110,9 @@ export default function App() {
     <>
       {/* {loading && <PageLoader />} */}
       <div
-        // className={`bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"
-        className={"bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500"}
+        className={
+          "bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500"
+        }
       >
         <div className="grid gap-28 w-1/2 max-w-4xl">
           <Title />
@@ -118,18 +124,15 @@ export default function App() {
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
               accusamus quasi magni totam? Nesciunt, harum!
             </div>
+            <div className="text-white">Font: {currentFont}</div>
             <div className="flex gap-2">
-              <Input />
-              <Button onClick={handleGuess} />
+              <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
+              {/* <Button onClick={handleGuess} /> */}
             </div>
           </div>
           <div className="grid gap-4 text-xl text-white justify-center">
-            <div>
-              Current streak: {currentStreak}
-            </div>
-            <div>
-              Highest streak: {highestStreak}
-            </div>
+            <div>Current streak: {currentStreak}</div>
+            <div>Highest streak: {highestStreak}</div>
           </div>
         </div>
       </div>

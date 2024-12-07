@@ -1,15 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import fonts from "../assets/google_fonts_list.json";
-import Button from "./Button";
 
-//--------------------------------------------------//
-// Export default
-//--------------------------------------------------//
-
-// Array dei nomi dei font estratto dal JSON
-const fontsArray = fonts.fonts.map((font) => font.name);
-
-export default function FontInput() {
+export default function GuessSection({ fontsArray, guessClick }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
@@ -53,6 +44,16 @@ export default function FontInput() {
         }
     };
 
+    const sendGuessedFont = () => {
+        if (fontsArray.includes(query))
+        {
+            guessClick(query);
+            setQuery("");
+        }
+        else
+            alert("Insert a valid font");
+    }
+
     // Effetto per chiudere il menu quando si clicca fuori dal componente
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -86,32 +87,43 @@ export default function FontInput() {
     }, [highlightedIndex]);
 
     return (
-        <div className="w-full flex flex-col justify-center gap-2 text-2xl">
-            <input
-                className="w-full bg-custom-black text-white p-4 rounded-lg"
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="What's the font?"
-            />
-            {suggestions.length > 0 && (
-                <ul
-                    ref={listRef}
-                    className="max-h-64 overflow-y-scroll z-50 rounded-lg"
-                >
-                    {suggestions.map((suggestion, index) => (
-                        <li
-                            className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
-                            key={index}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                            {suggestion}
-                        </li>
-                    ))}
-                </ul>
-            )}
+        <div className="w-full flex gap-2">
+            <div className="w-full flex flex-col justify-center gap-2 text-2xl">
+                <input
+                    className="w-full bg-custom-black text-white p-4 rounded-lg"
+                    ref={inputRef}
+                    type="text"
+                    value={query}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder="What's the font?"
+                />
+                {suggestions.length > 0 && (
+                    <ul
+                        ref={listRef}
+                        className="max-h-64 overflow-y-scroll z-50 rounded-lg"
+                        role="listbox"
+                        aria-label="Font suggestions"
+                    >
+                        {suggestions.map((suggestion, index) => (
+                            <li
+                                className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"
+                                    }`}
+                                role="option"
+                                aria-selected={index === highlightedIndex}
+                                key={index}
+                                onClick={() => handleSuggestionClick(suggestion)}
+                            >
+                                {suggestion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+            <button
+                className="bg-custom-black text-custom-violet rounded-lg text-2xl h-fit py-4 px-8 hover:bg-custom-black-1 hover:text-custom-green duration-100 active:scale-[90%]"
+                onClick={sendGuessedFont}>Guess
+            </button>
         </div>
     );
 }
