@@ -4,6 +4,7 @@ import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
 import GuessSection from "./components/GuessSection";
+import getRandomFont from "./components/getRandomFont";
 
 export default function App() {
   const [loading, setLoading] = useState(true); // Stato per il caricamento
@@ -14,19 +15,19 @@ export default function App() {
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
   // Funzione per selezionare un font casuale
-  const getRandomFont = () => {
-    const randomIndex = Math.floor(Math.random() * fontsArray.length);
-    return fontsArray[randomIndex];
-  };
+  // const getRandomFont = () => {
+  //   const randomIndex = Math.floor(Math.random() * fontsArray.length);
+  //   return fontsArray[randomIndex];
+  // };
 
   // Inizializza le streak da localStorage
   useEffect(() => {
     const savedCurrentStreak = localStorage.getItem("currentStreak");
     const savedHighestStreak = localStorage.getItem("highestStreak");
 
-    if (savedCurrentStreak) 
+    if (savedCurrentStreak)
       setCurrentStreak(parseInt(savedCurrentStreak, 10));
-    if (savedHighestStreak) 
+    if (savedHighestStreak)
       setHighestStreak(parseInt(savedHighestStreak, 10));
   }, []);
 

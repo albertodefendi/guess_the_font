@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import fonts from "../assets/google_fonts_list.json";
+import getRandomFont from "./getRandomFont";
 
 //--------------------------------------------------//
 // Export default
@@ -32,9 +33,9 @@ export default function FontChanger() {
     }, []);
 
     // Funzione per ottenere un font casuale dalla lista
-    const getRandomFont = () => {
-        return `"${fontsArray[Math.floor(Math.random() * fontsArray.length)]}"`;
-    };
+    // const getRandomFont = () => {
+    //     return `"${fontsArray[Math.floor(Math.random() * fontsArray.length)]}"`;
+    // };
 
     return (
         <h1 className="text-7xl text-white text-center">
