@@ -7,6 +7,7 @@ import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
 import GuessSection from "./components/GuessSection";
 import getRandomFont from "./components/getRandomFont";
+import { Settings2 } from "lucide-react"
 
 function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
@@ -83,7 +84,9 @@ function HomePage() {
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
           <div>
-            <Link to="/settings">Settings</Link>
+            <Link to="/settings">
+              <Settings2 className=""/>
+            </Link>
           </div>
         </div>
       </div>
