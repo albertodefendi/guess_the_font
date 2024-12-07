@@ -37,13 +37,17 @@ export default function App() {
 
   // Aggiorna localStorage quando le streak cambiano
   useEffect(() => {
-    localStorage.setItem("currentStreak", currentStreak);
-    localStorage.setItem("highestStreak", highestStreak);
+    if (currentStreak >= 0) {
+      localStorage.setItem("currentStreak", currentStreak);
+    }
+    if (highestStreak > 0) {
+      localStorage.setItem("highestStreak", highestStreak);
+    }
   }, [currentStreak, highestStreak]);
 
   // Funzione per cambiare font e aggiornare le streak
   const handleGuess = (value) => {
-    if (value == currentFont) {
+    if (value === currentFont) {
       setCurrentStreak((prev) => {
         const newStreak = prev + 1;
         setCurrentStreak(newStreak);
@@ -52,9 +56,8 @@ export default function App() {
         }
         return newStreak;
       });
-    }
-    else {
-      setCurrentStreak(0)
+    } else {
+      setCurrentStreak(0);
     }
     setCurrentFont(getRandomFont());
   };
@@ -108,7 +111,6 @@ export default function App() {
 
   return (
     <>
-      {/* {loading && <PageLoader />} */}
       <div
         className={
           "bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500"
@@ -127,7 +129,6 @@ export default function App() {
             <div className="text-white">Font: {currentFont}</div>
             <div className="flex gap-2">
               <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
-              {/* <Button onClick={handleGuess} /> */}
             </div>
           </div>
           <div className="grid gap-4 text-xl text-white justify-center">
