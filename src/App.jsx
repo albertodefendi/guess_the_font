@@ -1,13 +1,14 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import SettingsPage from './components/SettingsPage';
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
 import GuessSection from "./components/GuessSection";
 import getRandomFont from "./components/getRandomFont";
 
-export default function App() {
-  const [loading, setLoading] = useState(true); // Stato per il caricamento
+function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
   const [currentStreak, setCurrentStreak] = useState(0); // Stato per la streak attuale
   const [highestStreak, setHighestStreak] = useState(0); // Stato per la streak massima
@@ -58,33 +59,47 @@ export default function App() {
   };
 
   return (
-    <>
-      <div
-        className={
-          "bg-[url('./assets/typography_bg.png')] h-screen flex justify-center items-center transition-opacity duration-500"
-        }
-      >
-        <div className="grid gap-28 w-1/2 max-w-4xl">
-          <Title />
-          <div className="grid gap-12">
-            <div
-              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
-              style={{ fontFamily: currentFont }}
-            >
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
-              accusamus quasi magni totam? Nesciunt, harum!
-            </div>
-            <div className="text-white">Font: {currentFont}</div>
-            <div className="flex gap-2">
-              <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
-            </div>
+    <div
+      className={
+        "bg-main h-screen flex justify-center items-center transition-opacity duration-500"
+      }
+    >
+      <div className="grid gap-28 w-1/2 max-w-4xl">
+        <Title />
+        <div className="grid gap-12">
+          <div
+            className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
+            style={{ fontFamily: currentFont }}
+          >
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
+            accusamus quasi magni totam? Nesciunt, harum!
           </div>
-          <div className="grid gap-4 text-2xl text-white justify-center">
-            <div>Current streak: {currentStreak}</div>
-            <div>Highest streak: {highestStreak}</div>
+          <div className="text-white">Font: {currentFont}</div>
+          <div className="flex gap-2">
+            <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
+          </div>
+        </div>
+        <div className="grid gap-4 text-2xl text-white justify-center">
+          <div>Current streak: {currentStreak}</div>
+          <div>Highest streak: {highestStreak}</div>
+          <div>
+            <Link to="/settings">Settings</Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
+}
+
+
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Routes>
+    </Router>
+  )
 }
