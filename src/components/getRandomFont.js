@@ -1,7 +1,7 @@
 import fonts from "../assets/google_fonts_list.json"
-const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
 const getRandomFont = () => {
+    const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
     const randomIndex = Math.floor(Math.random() * fontsArray.length);
     const fontName = fontsArray[randomIndex].replace(/\s+/g, "+");
 

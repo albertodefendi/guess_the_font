@@ -14,12 +14,6 @@ export default function App() {
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
-  // Funzione per selezionare un font casuale
-  // const getRandomFont = () => {
-  //   const randomIndex = Math.floor(Math.random() * fontsArray.length);
-  //   return fontsArray[randomIndex];
-  // };
-
   // Inizializza le streak da localStorage
   useEffect(() => {
     const savedCurrentStreak = localStorage.getItem("currentStreak");
@@ -63,53 +57,6 @@ export default function App() {
     setCurrentFont(getRandomFont());
   };
 
-  // Gestione del caricamento dei font
-  useEffect(() => {
-    const loadFonts = () => {
-      let loadedCount = 0; // Conta i font caricati
-      const totalFonts = fonts.fonts.length;
-
-      fonts.fonts.forEach((font) => {
-        const link = document.createElement("link");
-        link.href = `https://fonts.googleapis.com/css2?family=${font.name.replace(
-          /\s+/g,
-          "+"
-        )}:wght@400&display=swap`;
-        link.rel = "stylesheet";
-
-        // Verifica il caricamento del font
-        link.onload = () => {
-          loadedCount += 1;
-          if (loadedCount === totalFonts) {
-            setLoading(false); // Tutti i font sono caricati
-          }
-        };
-
-        link.onerror = () => {
-          console.error(`Errore durante il caricamento del font: ${font.name}`);
-          loadedCount += 1; // Anche in caso di errore, procedi
-          if (loadedCount === totalFonts) {
-            setLoading(false);
-          }
-        };
-
-        document.head.appendChild(link);
-      });
-
-      // Timeout di fallback per garantire che il loader non resti bloccato
-      const timeout = setTimeout(() => {
-        if (loading) {
-          setLoading(false);
-        }
-      }, 5000); // 5 secondi di massimo attesa
-
-      // Cleanup per evitare memory leak
-      return () => clearTimeout(timeout);
-    };
-
-    loadFonts();
-  }, [loading]);
-
   return (
     <>
       <div
@@ -132,7 +79,7 @@ export default function App() {
               <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
             </div>
           </div>
-          <div className="grid gap-4 text-xl text-white justify-center">
+          <div className="grid gap-4 text-2xl text-white justify-center">
             <div>Current streak: {currentStreak}</div>
             <div>Highest streak: {highestStreak}</div>
           </div>
