@@ -12,26 +12,33 @@ import { Settings2 } from "lucide-react";
 
 function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
-  const [currentStreak, setCurrentStreak] = useState(0); // Stato per la streak attuale
-  const [highestStreak, setHighestStreak] = useState(0); // Stato per la streak massima
+  const [currentStreak, setCurrentStreak] = useState(() => {
+    // Inizializza da localStorage
+    const savedStreak = localStorage.getItem("currentStreak");
+    return savedStreak ? parseInt(savedStreak, 10) : 0;
+  });
+  const [highestStreak, setHighestStreak] = useState(() => {
+    // Inizializza da localStorage
+    const savedHighest = localStorage.getItem("highestStreak");
+    return savedHighest ? parseInt(savedHighest, 10) : 0;
+  });
   const { ultraInstinct } = useUltraInstinct();
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
   // Inizializza i dati da localStorage al caricamento della pagina
   useEffect(() => {
-    const savedCurrentStreak = localStorage.getItem("currentStreak");
-    const savedHighestStreak = localStorage.getItem("highestStreak");
     const savedFont = localStorage.getItem("currentFont"); // Recupera il font salvato
-
-    if (savedCurrentStreak)
-      setCurrentStreak(parseInt(savedCurrentStreak, 10));
-    if (savedHighestStreak)
-      setHighestStreak(parseInt(savedHighestStreak, 10));
-    if (savedFont)
-      setCurrentFont(savedFont); // Usa il font salvato se esiste
+    if (savedFont) {
+      setCurrentFont(savedFont);
+      const fontName = savedFont.replace(/\s+/g, "+");
+      const link = document.createElement("link");
+      link.href = `https://fonts.googleapis.com/css2?family=${fontName}&display=swap`;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
     else
-      setCurrentFont(getRandomFont()); // Altrimenti, usa un font casuale
+      setCurrentFont(getRandomFont());
   }, []);
 
   // Aggiorna localStorage quando cambia il font
@@ -43,12 +50,8 @@ function HomePage() {
 
   // Aggiorna localStorage quando le streak cambiano
   useEffect(() => {
-    if (currentStreak >= 0) {
-      localStorage.setItem("currentStreak", currentStreak);
-    }
-    if (highestStreak > 0) {
-      localStorage.setItem("highestStreak", highestStreak);
-    }
+    localStorage.setItem("currentStreak", currentStreak);
+    localStorage.setItem("highestStreak", highestStreak);
   }, [currentStreak, highestStreak]);
 
   // Funzione per cambiare font e aggiornare le streak
@@ -56,7 +59,6 @@ function HomePage() {
     if (value === currentFont) {
       setCurrentStreak((prev) => {
         const newStreak = prev + 1;
-        setCurrentStreak(newStreak);
         if (newStreak > highestStreak) {
           setHighestStreak(newStreak);
         }
@@ -101,7 +103,7 @@ function HomePage() {
           <div>Highest streak: {highestStreak}</div>
           <div>
             <Link to="/settings">
-              <Settings2 className="" />
+              <Settings2 size={28} className="hover:text-custom-green duration-100" />
             </Link>
           </div>
         </div>
@@ -122,3 +124,11 @@ export default function App() {
     </SettingsProvider>
   );
 }
+
+
+
+
+
+// TODO: aggiungere una sezione di crediti verso hexguess e fontguessr (qualcosa del tipo "highly inspired by...")
+// TODO: capire se devo gestire i cookie
+// TODO: mettere i crediti verso me stesso

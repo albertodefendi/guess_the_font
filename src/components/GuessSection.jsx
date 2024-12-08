@@ -50,6 +50,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
         if (fontsArray.includes(query)) {
             guessClick(query);
             setQuery("");
+            setGuessError(false);
         } else {
             setGuessError(true);
         }
