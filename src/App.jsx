@@ -1,15 +1,14 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import SettingsPage from './components/SettingsPage';
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import SettingsPage from "./components/SettingsPage";
 import { SettingsProvider } from "./components/SettingsContext";
 import { useUltraInstinct } from "./components/SettingsContext";
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
-import PageLoader from "./components/PageLoader";
 import GuessSection from "./components/GuessSection";
 import getRandomFont from "./components/getRandomFont";
-import { Settings2 } from "lucide-react"
+import { Settings2 } from "lucide-react";
 
 function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
@@ -19,21 +18,28 @@ function HomePage() {
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
-  // Inizializza le streak da localStorage
+  // Inizializza i dati da localStorage al caricamento della pagina
   useEffect(() => {
     const savedCurrentStreak = localStorage.getItem("currentStreak");
     const savedHighestStreak = localStorage.getItem("highestStreak");
+    const savedFont = localStorage.getItem("currentFont"); // Recupera il font salvato
 
     if (savedCurrentStreak)
       setCurrentStreak(parseInt(savedCurrentStreak, 10));
     if (savedHighestStreak)
       setHighestStreak(parseInt(savedHighestStreak, 10));
+    if (savedFont)
+      setCurrentFont(savedFont); // Usa il font salvato se esiste
+    else
+      setCurrentFont(getRandomFont()); // Altrimenti, usa un font casuale
   }, []);
 
-  // Aggiorna il font al caricamento della pagina
+  // Aggiorna localStorage quando cambia il font
   useEffect(() => {
-    setCurrentFont(getRandomFont());
-  }, []);
+    if (currentFont) {
+      localStorage.setItem("currentFont", currentFont);
+    }
+  }, [currentFont]);
 
   // Aggiorna localStorage quando le streak cambiano
   useEffect(() => {
@@ -71,14 +77,21 @@ function HomePage() {
       <div className="grid gap-28 w-1/2 max-w-4xl">
         <Title />
         <div className="grid gap-12">
-          <div
-            className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
-            style={{ fontFamily: currentFont }}
-          >
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
-            accusamus quasi magni totam? Nesciunt, harum!
+          <div className="flex flex-col gap-2">
+            <div
+              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
+              style={{ fontFamily: currentFont }}
+            >
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
+              accusamus quasi magni totam? Nesciunt, harum!
+            </div>
+            {ultraInstinct && (
+              <div className="text-white text-xl">
+                <span>Font: </span>
+                <span style={{ fontFamily: currentFont }}>{currentFont}</span>
+              </div>
+            )}
           </div>
-          { ultraInstinct && (<div className="text-white">Font: {currentFont}</div>)}
           <div className="flex gap-2">
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>
@@ -97,8 +110,6 @@ function HomePage() {
   );
 }
 
-
-
 export default function App() {
   return (
     <SettingsProvider>
@@ -109,5 +120,5 @@ export default function App() {
         </Routes>
       </Router>
     </SettingsProvider>
-  )
+  );
 }

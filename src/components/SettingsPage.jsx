@@ -13,7 +13,7 @@ export default function SettingsPage() {
 
     return (
         <div className="h-screen bg-main flex flex-col items-center justify-center text-white">
-            <div className="grid gap-4 p-8 text-2xl rounded-xl bg-custom-black-1">
+            <div className="grid gap-8 p-8 text-2xl rounded-xl bg-custom-black-1">
                 <Link
                     to="/"
                     className="w-fit"
@@ -21,6 +21,7 @@ export default function SettingsPage() {
                     <ArrowLeftToLine size={28} className="hover:text-custom-green duration-100" />
                 </Link>
                 <ToggleButton labelText={"Enable Ultra Instinct"} checkedValue={ultraInstinct} onChangeFunction={handleDebugToggle} />
+                <div>Use a custom text</div>
             </div>
         </div>
     );
