@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import SettingsPage from './components/SettingsPage';
 import { SettingsProvider } from "./components/SettingsContext";
-import { useDebug } from "./components/SettingsContext";
+import { useUltraInstinct } from "./components/SettingsContext";
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
@@ -15,7 +15,7 @@ function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
   const [currentStreak, setCurrentStreak] = useState(0); // Stato per la streak attuale
   const [highestStreak, setHighestStreak] = useState(0); // Stato per la streak massima
-  const { debugMode } = useDebug();
+  const { ultraInstinct } = useUltraInstinct();
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
@@ -78,7 +78,7 @@ function HomePage() {
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
             accusamus quasi magni totam? Nesciunt, harum!
           </div>
-          { debugMode && (<div className="text-white">Font: {currentFont}</div>)}
+          { ultraInstinct && (<div className="text-white">Font: {currentFont}</div>)}
           <div className="flex gap-2">
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>

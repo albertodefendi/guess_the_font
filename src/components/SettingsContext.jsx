@@ -2,13 +2,13 @@ import React, { createContext, useState, useContext } from "react";
 
 const SettingsContext = createContext();
 
-export const useDebug = () => useContext(SettingsContext);
+export const useUltraInstinct = () => useContext(SettingsContext);
 
 export function SettingsProvider({ children }) {
-    const [debugMode, setDebugMode] = useState(false);
+    const [ultraInstinct, setUltraInstinct] = useState(false);
 
     return (
-        <SettingsContext.Provider value={{ debugMode, setDebugMode }}>
+        <SettingsContext.Provider value={{ ultraInstinct, setUltraInstinct }}>
             {children}
         </SettingsContext.Provider>
     );
