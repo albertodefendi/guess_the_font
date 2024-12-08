@@ -2,6 +2,8 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import SettingsPage from './components/SettingsPage';
+import { SettingsProvider } from "./components/SettingsContext";
+import { useDebug } from "./components/SettingsContext";
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import PageLoader from "./components/PageLoader";
@@ -13,6 +15,7 @@ function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
   const [currentStreak, setCurrentStreak] = useState(0); // Stato per la streak attuale
   const [highestStreak, setHighestStreak] = useState(0); // Stato per la streak massima
+  const { debugMode } = useDebug();
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
@@ -75,7 +78,7 @@ function HomePage() {
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
             accusamus quasi magni totam? Nesciunt, harum!
           </div>
-          <div className="text-white">Font: {currentFont}</div>
+          { debugMode && (<div className="text-white">Font: {currentFont}</div>)}
           <div className="flex gap-2">
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>
@@ -85,7 +88,7 @@ function HomePage() {
           <div>Highest streak: {highestStreak}</div>
           <div>
             <Link to="/settings">
-              <Settings2 className=""/>
+              <Settings2 className="" />
             </Link>
           </div>
         </div>
@@ -98,11 +101,13 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Routes>
-    </Router>
+    <SettingsProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Routes>
+      </Router>
+    </SettingsProvider>
   )
 }

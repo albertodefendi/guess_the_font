@@ -11,7 +11,7 @@ const getRandomFont = () => {
 
     if (!existingLink) {
         const link = document.createElement("link");
-        link.href = `https://fonts.googleapis.com/css2?family=${fontName}:wght@400&display=swap`;
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName}&display=swap&cache-bust=${new Date().getTime()}`;
         link.rel = "stylesheet";
         document.head.appendChild(link);
     }

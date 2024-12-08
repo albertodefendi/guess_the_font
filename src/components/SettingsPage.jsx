@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeftToLine } from "lucide-react"
+import { useDebug } from "./SettingsContext";
 
 export default function SettingsPage() {
-    const [debugMode, setDebugMode] = useState(false);
+    const { debugMode, setDebugMode } = useDebug();
 
     const handleDebugToggle = (event) => {
         setDebugMode(event.target.checked);
@@ -35,3 +36,9 @@ export default function SettingsPage() {
         </div>
     );
 }
+
+
+
+
+// TODO: aggiungere una sezione per mettere un testo custom per l'identificazione del font
+// TODO: aggiungere la possibilità di modificare i colori del tema

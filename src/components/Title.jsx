@@ -1,45 +1,35 @@
 import { useEffect, useState } from "react";
-import fonts from "../assets/google_fonts_list.json";
 import getRandomFont from "./getRandomFont";
 
-//--------------------------------------------------//
-// Export default
-//--------------------------------------------------//
 
-const text = "Guess The Font"; // h1 della pagina
+
+const title = "Guess The Font"; // h1 della pagina
 
 export default function FontChanger() {
     const [fontsPerLetter, setFontsPerLetter] = useState([]);
-    const fontsArray = fonts.fonts.map((font) => font.name); // Otteniamo i nomi dei font dal JSON
 
     useEffect(() => {
         // Imposta il font iniziale per ogni lettera
-        const initialFonts = text.split("").map(() => getRandomFont());
+        const initialFonts = title.split("").map(() => getRandomFont());
         setFontsPerLetter(initialFonts);
 
-        // Cambia il font di una lettera ogni 4 secondi
+        // Cambia il font di una lettera casuale ogni 3 secondi
         const interval = setInterval(() => {
-            // Seleziona una lettera casuale e cambia il suo font
-            const randomIndex = Math.floor(Math.random() * text.length);
+            const randomIndex = Math.floor(Math.random() * title.length);
             setFontsPerLetter((prevFonts) => {
                 const newFonts = [...prevFonts];
-                newFonts[randomIndex] = getRandomFont(); // Cambia solo il font di una lettera
+                newFonts[randomIndex] = getRandomFont();
                 return newFonts;
             });
-        }, 3000); // Cambia ogni 3 secondi
+        }, 5000);
 
         // Pulisce l'intervallo quando il componente viene smontato
         return () => clearInterval(interval);
     }, []);
 
-    // Funzione per ottenere un font casuale dalla lista
-    // const getRandomFont = () => {
-    //     return `"${fontsArray[Math.floor(Math.random() * fontsArray.length)]}"`;
-    // };
-
     return (
         <h1 className="text-7xl text-white text-center">
-            {text.split("").map((letter, index) => (
+            {title.split("").map((letter, index) => (
                 letter === " " ? (
                     <span
                         key={index}

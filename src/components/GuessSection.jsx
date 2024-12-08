@@ -137,3 +137,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
         </div>
     );
 }
+
+
+// TODO: aggiungere un div di esito del tentativo di indovinare, in cui si dice successo o errore e si mostra qual era il font corretto
+// TODO: modificare il div dei suggerimenti di input in modo che si sovrapponga a ciò che c'è sotto (forse con absolute/relative) e non sposti tutti gli altri elementi
