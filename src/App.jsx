@@ -75,19 +75,19 @@ function HomePage() {
         "bg-main min-h-screen flex justify-center items-center transition-opacity duration-500"
       }
     >
-      <div className="grid p-4 gap-16 lg:w-1/2 max-w-4xl">
+      <div className="grid p-4 gap-16 lg:w-1/2 max-w-4xl text-xl lg:text-3xl">
         <Title />
         <div className="grid gap-12">
           <div className="flex flex-col gap-2">
             <div
-              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-3xl text-center"
+              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-center"
               style={{ fontFamily: currentFont }}
             >
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
               accusamus quasi magni totam? Nesciunt, harum!
             </div>
             {ultraInstinct && (
-              <div className="text-white text-xl">
+              <div className="text-white text-base lg:text-xl">
                 <span>Font: </span>
                 <span style={{ fontFamily: currentFont }}>{currentFont}</span>
               </div>
@@ -97,7 +97,7 @@ function HomePage() {
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>
         </div>
-        <div className="grid gap-4 text-2xl text-white justify-center">
+        <div className="grid gap-4 text-lg lg:text-2xl text-white justify-center">
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
         </div>

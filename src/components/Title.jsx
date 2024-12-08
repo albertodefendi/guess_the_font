@@ -26,7 +26,7 @@ export default function FontChanger() {
     }, []);
 
     return (
-        <h1 className="text-7xl text-white text-center">
+        <h1 className="text-6xl lg:text-7xl text-white text-center">
             {title.split("").map((letter, index) => (
                 letter === " " ? (
                     <span

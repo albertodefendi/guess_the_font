@@ -13,7 +13,7 @@ export default function SettingsPage() {
 
     return (
         <div className="min-h-screen bg-main flex flex-col items-center justify-center text-white">
-            <div className="grid gap-8 p-8 text-2xl rounded-xl bg-custom-black-1">
+            <div className="grid gap-8 p-8 text-lg lg:text-2xl rounded-xl bg-custom-black-1">
                 <Link
                     to="/"
                     className="w-fit"

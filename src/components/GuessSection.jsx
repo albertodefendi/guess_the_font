@@ -96,8 +96,8 @@ export default function GuessSection({ fontsArray, guessClick }) {
     };
 
     return (
-        <div className="w-full flex gap-2">
-            <div className="w-full flex flex-col justify-center gap-2 text-2xl">
+        <div className="w-full flex gap-2 text-lg lg:text-2xl">
+            <div className="w-full flex flex-col justify-center gap-2">
                 <input
                     className={`w-full bg-custom-black text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-500 text-red-500" : ""}`}
                     ref={inputRef}
@@ -130,7 +130,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
                 )}
             </div>
             <button
-                className="bg-custom-black text-custom-violet rounded-lg text-2xl h-fit py-4 px-8 hover:bg-custom-black-1 hover:text-custom-green duration-100 active:scale-[90%]"
+                className="bg-custom-black text-custom-violet rounded-lg h-fit py-4 px-8 hover:bg-custom-black-1 hover:text-custom-green duration-100 active:scale-[90%]"
                 onClick={sendGuessedFont}
             >
                 Guess
