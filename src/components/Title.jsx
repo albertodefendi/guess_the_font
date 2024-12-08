@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import getRandomFont from "./getRandomFont";
-
-
+import { getRandomFont } from "./UtilityFunctions";
 
 const title = "Guess The Font"; // h1 della pagina
 

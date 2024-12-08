@@ -1,3 +1,5 @@
+// Go on https://fonts.google.com/?script=Latn, order by name and paste this code on the console; it downloads a json of the fonts
+
 (async function extractAllFonts() {
     const SCROLL_STEP = 1600; // Numero di pixel da scrollare ogni volta
     const SCROLL_DELAY = 500; // Millisecondi di attesa tra ogni scroll

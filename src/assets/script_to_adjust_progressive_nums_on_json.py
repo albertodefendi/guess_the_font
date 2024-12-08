@@ -1,3 +1,5 @@
+# If you need to remove some of the fonts in google_fonts_list.json, this script adjust the sequential id's
+
 import json
 
 # Carica il JSON da un file

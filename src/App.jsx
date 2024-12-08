@@ -2,13 +2,16 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import SettingsPage from "./components/SettingsPage";
+import InfoPage from "./components/InfoPage";
 import { SettingsProvider } from "./components/SettingsContext";
 import { useUltraInstinct } from "./components/SettingsContext";
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import GuessSection from "./components/GuessSection";
-import getRandomFont from "./components/getRandomFont";
-import { Settings2 } from "lucide-react";
+import { Settings } from "lucide-react";
+import { Info } from "lucide-react";
+import { getRandomFont } from "./components/UtilityFunctions";
+import { appendFontToHtml } from "./components/UtilityFunctions";
 
 function HomePage() {
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
@@ -31,11 +34,7 @@ function HomePage() {
     const savedFont = localStorage.getItem("currentFont"); // Recupera il font salvato
     if (savedFont) {
       setCurrentFont(savedFont);
-      const fontName = savedFont.replace(/\s+/g, "+");
-      const link = document.createElement("link");
-      link.href = `https://fonts.googleapis.com/css2?family=${fontName}&display=swap`;
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
+      appendFontToHtml(savedFont)
     }
     else
       setCurrentFont(getRandomFont());
@@ -73,10 +72,10 @@ function HomePage() {
   return (
     <div
       className={
-        "bg-main h-screen flex justify-center items-center transition-opacity duration-500"
+        "bg-main min-h-screen flex justify-center items-center transition-opacity duration-500"
       }
     >
-      <div className="grid gap-28 w-1/2 max-w-4xl">
+      <div className="grid p-4 gap-16 lg:w-1/2 max-w-4xl">
         <Title />
         <div className="grid gap-12">
           <div className="flex flex-col gap-2">
@@ -101,11 +100,14 @@ function HomePage() {
         <div className="grid gap-4 text-2xl text-white justify-center">
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
-          <div>
-            <Link to="/settings">
-              <Settings2 size={28} className="hover:text-custom-green duration-100" />
-            </Link>
-          </div>
+        </div>
+        <div className="flex gap-4 justify-end">
+          <Link to="/info">
+            <Info size={32} className="text-white hover:text-custom-green duration-100" />
+          </Link>
+          <Link to="/settings">
+            <Settings size={32} className="text-white hover:text-custom-green duration-100" />
+          </Link>
         </div>
       </div>
     </div>
@@ -119,6 +121,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/info" element={<InfoPage />} />
         </Routes>
       </Router>
     </SettingsProvider>
