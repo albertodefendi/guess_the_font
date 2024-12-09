@@ -14,18 +14,21 @@ import { getRandomFont } from "./components/UtilityFunctions";
 import { appendFontToHtml } from "./components/UtilityFunctions";
 
 function HomePage() {
+  const { ultraInstinct } = useUltraInstinct();
   const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
   const [currentStreak, setCurrentStreak] = useState(() => {
     // Inizializza da localStorage
     const savedStreak = localStorage.getItem("currentStreak");
-    return savedStreak ? parseInt(savedStreak, 10) : 0;
+    if (ultraInstinct)
+      return 0;
+    else
+      return savedStreak ? parseInt(savedStreak, 10) : 0;
   });
   const [highestStreak, setHighestStreak] = useState(() => {
     // Inizializza da localStorage
     const savedHighest = localStorage.getItem("highestStreak");
     return savedHighest ? parseInt(savedHighest, 10) : 0;
   });
-  const { ultraInstinct } = useUltraInstinct();
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
@@ -55,7 +58,7 @@ function HomePage() {
 
   // Funzione per cambiare font e aggiornare le streak
   const handleGuess = (value) => {
-    if (value === currentFont) {
+    if (!ultraInstinct && value === currentFont) {
       setCurrentStreak((prev) => {
         const newStreak = prev + 1;
         if (newStreak > highestStreak) {
@@ -88,7 +91,7 @@ function HomePage() {
             </div>
             {ultraInstinct && (
               <div className="text-white text-base lg:text-xl">
-                <span>Font: </span>
+                <span>Answer: </span>
                 <span style={{ fontFamily: currentFont }}>{currentFont}</span>
               </div>
             )}
@@ -97,7 +100,7 @@ function HomePage() {
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>
         </div>
-        <div className="grid gap-4 text-lg lg:text-2xl text-white justify-center">
+        <div className={`grid gap-4 text-lg lg:text-2xl justify-center ${ultraInstinct ? "text-zinc-500" : "text-white"}`}>
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
         </div>
