@@ -100,7 +100,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
         <div className="w-full flex gap-2 text-lg lg:text-2xl">
             <div className="w-full flex flex-col justify-center gap-2">
                 <input
-                    className={`w-full bg-custom-black text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-500 text-red-500" : ""}`}
+                    className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-500 text-red-500" : ""}`}
                     ref={inputRef}
                     type="text"
                     value={query}

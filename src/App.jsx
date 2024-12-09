@@ -19,16 +19,15 @@ function HomePage() {
   const [currentStreak, setCurrentStreak] = useState(() => {
     // Inizializza da localStorage
     const savedStreak = localStorage.getItem("currentStreak");
-    if (ultraInstinct)
-      return 0;
-    else
-      return savedStreak ? parseInt(savedStreak, 10) : 0;
+    if (ultraInstinct) return 0;
+    else return savedStreak ? parseInt(savedStreak, 10) : 0;
   });
   const [highestStreak, setHighestStreak] = useState(() => {
     // Inizializza da localStorage
     const savedHighest = localStorage.getItem("highestStreak");
     return savedHighest ? parseInt(savedHighest, 10) : 0;
   });
+  const customText = localStorage.getItem("customText");
 
   const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
@@ -37,10 +36,8 @@ function HomePage() {
     const savedFont = localStorage.getItem("currentFont"); // Recupera il font salvato
     if (savedFont) {
       setCurrentFont(savedFont);
-      appendFontToHtml(savedFont)
-    }
-    else
-      setCurrentFont(getRandomFont());
+      appendFontToHtml(savedFont);
+    } else setCurrentFont(getRandomFont());
   }, []);
 
   // Aggiorna localStorage quando cambia il font
@@ -83,11 +80,12 @@ function HomePage() {
         <div className="grid gap-12">
           <div className="flex flex-col gap-2">
             <div
-              className="bg-custom-black border-4 border-custom-green text-custom-violet w-full rounded-3xl p-8 text-center"
+              className="w-full bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl p-8 text-center break-words max-w-4xl"
               style={{ fontFamily: currentFont }}
             >
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse
-              accusamus quasi magni totam? Nesciunt, harum!
+              {/* {`${customText ? customText : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}`} */}
+              {customText ||
+                "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
             </div>
             {ultraInstinct && (
               <div className="text-white text-base lg:text-xl">
@@ -100,16 +98,25 @@ function HomePage() {
             <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
           </div>
         </div>
-        <div className={`grid gap-4 text-lg lg:text-2xl justify-center ${ultraInstinct ? "text-zinc-500" : "text-white"}`}>
+        <div
+          className={`grid gap-4 text-lg lg:text-2xl justify-center ${ultraInstinct ? "text-zinc-500" : "text-white"
+            }`}
+        >
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
         </div>
         <div className="flex gap-4 justify-end">
           <Link to="/info">
-            <Info size={32} className="text-white hover:text-custom-green duration-100" />
+            <Info
+              size={32}
+              className="text-white hover:text-custom-green duration-100"
+            />
           </Link>
           <Link to="/settings">
-            <Settings size={32} className="text-white hover:text-custom-green duration-100" />
+            <Settings
+              size={32}
+              className="text-white hover:text-custom-green duration-100"
+            />
           </Link>
         </div>
       </div>
@@ -130,10 +137,6 @@ export default function App() {
     </SettingsProvider>
   );
 }
-
-
-
-
 
 // TODO: aggiungere una sezione di crediti verso hexguess e fontguessr (qualcosa del tipo "highly inspired by...")
 // TODO: capire se devo gestire i cookie
