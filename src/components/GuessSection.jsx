@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import MyButton from "./MyButton";
 
 export default function GuessSection({ fontsArray, guessClick }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
@@ -129,12 +130,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
                     </ul>
                 )}
             </div>
-            <button
-                className="bg-custom-black text-custom-violet rounded-lg h-fit py-4 px-8 hover:bg-custom-black-1 hover:text-custom-green duration-100 active:scale-[90%]"
-                onClick={sendGuessedFont}
-            >
-                Guess
-            </button>
+            <MyButton onClickFunction={sendGuessedFont}>Guess</MyButton>
         </div>
     );
 }

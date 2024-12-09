@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import MyButton from "./MyButton";
 import { Link } from "react-router-dom";
 import { ArrowLeftToLine } from "lucide-react"
 import { useUltraInstinct } from "./SettingsContext";
@@ -57,7 +58,7 @@ function TextChangeModal() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
         <>
-            <Button onPress={onOpen}>Open Modal</Button>
+            <MyButton classNames="text-lg" onClickFunction={onOpen}>Change</MyButton>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (

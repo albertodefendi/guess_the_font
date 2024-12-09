@@ -26,3 +26,6 @@ export default function InfoPage() {
         </div>
     );
 }
+
+
+// TODO: Aggiungere altre info
