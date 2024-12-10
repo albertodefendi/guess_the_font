@@ -1,4 +1,5 @@
 import "./App.css";
+import { version as projectVersion } from "../package.json";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import SettingsPage from "./components/SettingsPage";
@@ -8,10 +9,8 @@ import { useUltraInstinct } from "./components/SettingsContext";
 import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import GuessSection from "./components/GuessSection";
-import { Settings } from "lucide-react";
-import { Info } from "lucide-react";
-import { getRandomFont } from "./components/UtilityFunctions";
-import { appendFontToHtml } from "./components/UtilityFunctions";
+import { Settings, Info, Bug } from "lucide-react";
+import { getRandomFont, appendFontToHtml } from "./components/UtilityFunctions";
 
 function HomePage() {
   const { ultraInstinct } = useUltraInstinct();
@@ -100,19 +99,33 @@ function HomePage() {
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
         </div>
-        <div className="flex gap-4 justify-end">
-          <Link to="/info">
-            <Info
-              size={32}
-              className="text-white hover:text-custom-green duration-100"
-            />
-          </Link>
-          <Link to="/settings">
-            <Settings
-              size={32}
-              className="text-white hover:text-custom-green duration-100"
-            />
-          </Link>
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-2 justify-center text-white text-sm">
+            <div>Made by:&nbsp;
+              <a href="https://albertodefendi.netlify.app" target="_blank" className="underline hover:text-custom-green">Alberto Defendi</a>
+            </div>
+            <div>v{projectVersion}</div>
+          </div>
+          <div className="flex gap-4 ">
+            {/* <Link to="/bug">
+              <Bug
+                size={32}
+                className="text-white hover:text-custom-green duration-100"
+              />
+            </Link> */}
+            <Link to="/info">
+              <Info
+                size={32}
+                className="text-white hover:text-custom-green duration-100"
+              />
+            </Link>
+            <Link to="/settings">
+              <Settings
+                size={32}
+                className="text-white hover:text-custom-green duration-100"
+              />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +146,6 @@ export default function App() {
   );
 }
 
-// TODO: aggiungere una sezione di crediti verso hexguess e fontguessr (qualcosa del tipo "highly inspired by...")
 // TODO: capire se devo gestire i cookie
-// TODO: mettere i crediti verso me stesso
+// TODO: aggiungere la sezione di report di un bug
+// TODO: aggiungere un tasto share results

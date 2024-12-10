@@ -5,15 +5,14 @@ export default function InfoPage() {
     return (
         <div className="min-h-screen bg-main flex flex-col items-center justify-center text-white">
             <div className="flex flex-col gap-14 p-8 text-lg lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
-                <div className="flex justify-between">
-                    <Link
-                        to="/"
-                        className="w-fit flex-1"
-                    >
-                        <ArrowLeftToLine size={28} className="hover:text-custom-green duration-100" />
-                    </Link>
-                    <div className="text-xl lg:text-2xl">Info</div>
-                    <div className="flex-1"></div>
+                <div className="flex justify-between items-center">
+                    <div className="basis-1/3">
+                        <Link to="/" className="w-min flex">
+                            <ArrowLeftToLine size={28} className="hover:text-custom-green duration-100" />
+                        </Link>
+                    </div>
+                    <div className="basis-1/3 text-xl lg:text-2xl text-center">Info</div>
+                    <div className="basis-1/3"></div>
                 </div>
                 <div>
                     <div className="grid gap-8">

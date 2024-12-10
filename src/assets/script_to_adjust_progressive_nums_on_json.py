@@ -32,7 +32,7 @@ for item in fonts:
         new_id += 1
 
 # Salva il JSON modificato in un nuovo file
-with open('modified_data.json', 'w') as f:
+with open('google_fonts_list_updated.json', 'w') as f:
     json.dump(data, f, indent=4)
 
 print("JSON modificato e salvato con successo!")
