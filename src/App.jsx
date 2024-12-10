@@ -70,20 +70,15 @@ function HomePage() {
   };
 
   return (
-    <div
-      className={
-        "bg-main min-h-screen flex justify-center items-center transition-opacity duration-500"
-      }
-    >
-      <div className="grid p-4 gap-16 lg:w-1/2 max-w-4xl text-xl lg:text-3xl">
+    <div className="bg-main min-h-screen flex justify-center items-center transition-opacity duration-500">
+      <div className="max-w-4xl grid p-4 gap-24 text-xl lg:text-3xl">
         <Title />
-        <div className="grid gap-12">
-          <div className="flex flex-col gap-2">
+        <div className="grid gap-8">
+          <div className="flex flex-col gap-4">
             <div
-              className="w-full bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl p-8 text-center break-words max-w-4xl"
+              className="w-full bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl p-8 text-center [overflow-wrap:anywhere]"
               style={{ fontFamily: currentFont }}
             >
-              {/* {`${customText ? customText : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}`} */}
               {customText ||
                 "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
             </div>

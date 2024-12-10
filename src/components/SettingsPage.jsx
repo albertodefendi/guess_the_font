@@ -44,10 +44,10 @@ export default function SettingsPage() {
                             wrapper: "bg-zinc-500 group-data-[selected=true]:bg-custom-green",
                             label: "text-inherit text-[length:inherit] ms-0",
                         }}>
-                        <div>
-                            Enable Ultra Instinct
+                        <div className="me-8">
+                            <div>Enable Ultra Instinct</div>
+                            <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak!</div>
                         </div>
-                        <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak!</div>
                     </Switch>
                     <div className="flex justify-between">
                         <div className="flex items-center">Use a custom text</div>
@@ -130,5 +130,4 @@ function TextChangeModal() {
 
 
 
-// TODO: aggiungere una sezione per mettere un testo custom per l'identificazione del font
 // TODO: aggiungere la possibilità di modificare i colori del tema

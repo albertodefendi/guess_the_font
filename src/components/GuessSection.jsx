@@ -112,13 +112,13 @@ export default function GuessSection({ fontsArray, guessClick }) {
                 {suggestions.length > 0 && (
                     <ul
                         ref={listRef}
-                        className="max-h-64 overflow-y-scroll z-50 rounded-lg"
+                        className="absolute w-full h-72 overflow-y-scroll z-50 rounded-lg"
                         role="listbox"
                         aria-label="Font suggestions"
                     >
                         {suggestions.map((suggestion, index) => (
                             <li
-                                className={`p-3 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
+                                className={`p-4 cursor-pointer text-white ${index === highlightedIndex ? "bg-custom-violet" : "bg-custom-black-1"}`}
                                 role="option"
                                 aria-selected={index === highlightedIndex}
                                 key={index}
