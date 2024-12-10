@@ -74,7 +74,7 @@ function HomePage() {
       <div className="max-w-4xl grid p-4 gap-24 text-xl lg:text-3xl">
         <Title />
         <div className="grid gap-8">
-          <div className="flex flex-col gap-4">
+          <div className="w-auto flex flex-col gap-4">
             <div
               className="w-full bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl p-8 text-center [overflow-wrap:anywhere]"
               style={{ fontFamily: currentFont }}

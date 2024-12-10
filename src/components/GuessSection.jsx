@@ -98,7 +98,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
 
     return (
         <div className="w-full flex gap-2 text-lg lg:text-2xl">
-            <div className="w-full flex flex-col justify-center gap-2">
+            <div className="relative w-full flex flex-col justify-center gap-2">
                 <input
                     className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-500 text-red-500" : ""}`}
                     ref={inputRef}
@@ -112,7 +112,7 @@ export default function GuessSection({ fontsArray, guessClick }) {
                 {suggestions.length > 0 && (
                     <ul
                         ref={listRef}
-                        className="absolute w-full h-72 overflow-y-scroll z-50 rounded-lg"
+                        className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-scroll z-50 rounded-lg"
                         role="listbox"
                         aria-label="Font suggestions"
                     >
