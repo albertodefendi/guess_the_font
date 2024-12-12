@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeftToLine } from "lucide-react"
 import { useUltraInstinct } from "./SettingsContext";
 import {
+    Divider,
     Switch,
     Textarea,
     Modal,
@@ -19,12 +20,13 @@ export default function SettingsPage() {
     const { ultraInstinct, setUltraInstinct } = useUltraInstinct();
 
     const handleDebugToggle = (event) => {
-        setUltraInstinct(event.target.checked);
+        // setUltraInstinct(event.target.checked);
+        setUltraInstinct((prevState) => !prevState);
     };
 
     return (
         <div className="min-h-screen bg-main p-4 flex flex-col items-center justify-center text-white">
-            <div className="flex flex-col gap-14 p-8 text-lg lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
+            <div className="xl:w-1/2 max-w-3xl flex flex-col gap-14 p-8 text-lg lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
                 <div className="flex justify-between items-center">
                     <div className="basis-1/3">
                         <Link to="/" className="w-min flex">
@@ -34,24 +36,24 @@ export default function SettingsPage() {
                     <div className="basis-1/3 text-xl lg:text-2xl text-center">Settings</div>
                     <div className="basis-1/3"></div>
                 </div>
-                <div className="grid gap-8">
-                    <Switch
-                        isSelected={ultraInstinct}
-                        onChange={handleDebugToggle}
-                        classNames={{
-                            base: "inline-flex flex-row-reverse justify-between",
-                            wrapper: "bg-zinc-500 group-data-[selected=true]:bg-custom-green",
-                            label: "text-inherit text-[length:inherit] ms-0",
-                        }}>
-                        <div className="me-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+
+                    {/* FIrst row */}
+                    <div className="flex items-center lg:col-span-3">
+                        <div>
                             <div>Enable Ultra Instinct</div>
                             <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak!</div>
                         </div>
-                    </Switch>
-                    <div className="flex justify-between">
-                        <div className="flex items-center">Use a custom text</div>
-                        <TextChangeModal></TextChangeModal>
                     </div>
+                    <MyButton className={`text-base lg:text-lg${ultraInstinct ? " text-[#000000] bg-custom-green" : ""}`} onClickFunction={handleDebugToggle}>
+                        {!ultraInstinct ? "Enable" : "Disable"}
+                    </MyButton>
+
+                    <Divider className="lg:col-span-4 bg-custom-black-2" orientation="horizontal" />
+
+                    {/* Second row */}
+                    <div className="flex items-center lg:col-span-3">Use a custom text</div>
+                    <TextChangeModal></TextChangeModal>
                 </div>
             </div>
         </div>
@@ -60,7 +62,7 @@ export default function SettingsPage() {
 
 
 
-function TextChangeModal() {
+function TextChangeModal({ className }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [textArea, setTextArea] = useState("");
     const maxChars = 140;
@@ -90,7 +92,8 @@ function TextChangeModal() {
 
     return (
         <>
-            <MyButton className="text-lg" onClickFunction={onOpen}>Change</MyButton>
+            {/* <div className={`flex justify-end${className ? " " + className : ""}`}> */}
+            <MyButton className="text-base lg:text-lg" onClickFunction={onOpen}>Change</MyButton>
             <Modal isOpen={isOpen} size={"xl"} onOpenChange={onOpenChange} placement="center" className="m-4">
                 <ModalContent>
                     {(onClose) => (
@@ -122,6 +125,7 @@ function TextChangeModal() {
                     )}
                 </ModalContent>
             </Modal>
+            {/* </div> */}
         </>
     );
 }
