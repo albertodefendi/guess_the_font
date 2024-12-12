@@ -10,7 +10,10 @@ import fonts from "./assets/google_fonts_list.json";
 import Title from "./components/Title";
 import GuessSection from "./components/GuessSection";
 import { Settings, Info, Bug } from "lucide-react";
-import { getRandomFont, appendFontToHtml } from "./components/UtilityFunctions";
+import { getRandomFont, appendFontToHtml, fontRegexUrl } from "./components/UtilityFunctions";
+
+const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
+const fontsNumber = fontsArray.length;
 
 function HomePage() {
   const { ultraInstinct } = useUltraInstinct();
@@ -27,8 +30,6 @@ function HomePage() {
     return savedHighest ? parseInt(savedHighest, 10) : 0;
   });
   const customText = localStorage.getItem("customText");
-
-  const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 
   // Inizializza i dati da localStorage al caricamento della pagina
   useEffect(() => {
@@ -75,7 +76,7 @@ function HomePage() {
         <div className="grid gap-8">
           <div className="w-auto flex flex-col gap-4">
             <div
-              className="w-full bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl p-8 text-center [overflow-wrap:anywhere]"
+              className="w-full min-h-48 p-8 flex items-center text-center bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl [overflow-wrap:anywhere]"
               style={{ fontFamily: currentFont }}
             >
               {customText ||
@@ -84,7 +85,7 @@ function HomePage() {
             {ultraInstinct && (
               <div className="text-white text-base lg:text-xl">
                 <span>Answer: </span>
-                <span style={{ fontFamily: currentFont }}>{currentFont}</span>
+                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
               </div>
             )}
           </div>
@@ -139,7 +140,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/info" element={<InfoPage />} />
+          <Route path="/info" element={<InfoPage fontsNumber={fontsNumber} />} />
         </Routes>
       </Router>
     </SettingsProvider>

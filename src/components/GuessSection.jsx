@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
+import { fontRegexUrl } from "./UtilityFunctions";
 
 export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
@@ -153,10 +154,10 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
                             )}
                             <div className="grid grid-cols-2 gap-x-4">
                                 <div>Your guess:</div>
-                                <div style={{ fontFamily: query }}>{query}</div>
+                                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
 
                                 <div>Answer:</div>
-                                <div style={{ fontFamily: currentFont }}>{currentFont}</div>
+                                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
 
                             </div>
                         </div>
