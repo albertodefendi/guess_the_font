@@ -24,7 +24,7 @@ export default function SettingsPage() {
 
     return (
         <div className="min-h-screen bg-main p-4 flex flex-col items-center justify-center text-white">
-            <div className="xl:w-1/2 max-w-3xl flex flex-col gap-14 p-8 text-lg lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
+            <div className="xl:w-1/2 max-w-3xl flex flex-col gap-12 p-8 text-base lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
                 <div className="flex justify-between items-center">
                     <div className="basis-1/3">
                         <Link to="/" className="w-min flex">

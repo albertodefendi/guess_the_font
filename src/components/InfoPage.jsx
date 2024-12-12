@@ -4,7 +4,7 @@ import { ArrowLeftToLine } from "lucide-react"
 export default function InfoPage() {
     return (
         <div className="min-h-screen bg-main p-4 flex flex-col items-center justify-center text-white">
-            <div className="xl:w-1/2 max-w-2xl flex flex-col gap-14 p-8 text-lg lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
+            <div className="xl:w-1/2 max-w-2xl flex flex-col gap-14 p-8 text-base lg:text-xl rounded-xl bg-custom-black border-4 border-zinc-700">
                 <div className="flex justify-between items-center">
                     <div className="basis-1/3">
                         <Link to="/" className="w-min flex">
@@ -17,8 +17,8 @@ export default function InfoPage() {
                 <div>
                     <div className="grid gap-16">
                         <div>
-                            <div className="bg-custom-violet text-black font-bold px-1">WHAT IS GUESS THE FONT</div>
-                            <div className="my-2">Guess The Font is... just a game about guessing the font. Yeah I know, who whould have thought, right?</div>
+                            <div className="bg-custom-violet text-black font-bold px-1">WHAT IS "GUESS THE FONT"</div>
+                            <div className="my-2">"Guess The Font" is... just a game about guessing the font. Who whould have thought, right?</div>
                             <div className="my-4">But wait, seriously, the main concept is actually to get people to discover new fonts and improve their knowledge about typography. Or at least this was the initial purpose.</div>
                         </div>
                         <div>

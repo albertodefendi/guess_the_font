@@ -89,7 +89,7 @@ function HomePage() {
             )}
           </div>
           <div className="flex gap-2">
-            <GuessSection fontsArray={fontsArray} guessClick={handleGuess} />
+            <GuessSection fontsArray={fontsArray} guessClick={handleGuess} currentFont={currentFont} />
           </div>
         </div>
         <div
