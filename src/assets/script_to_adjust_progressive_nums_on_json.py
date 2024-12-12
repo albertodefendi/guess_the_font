@@ -2,6 +2,9 @@
 
 import json
 
+# Elenco dei font da escludere
+excludedFonts = ["Abhaya Libre", "Shippori Mincho", "Shippori Mincho B1", "Shippori Antique", "Shippori Antique B1"]
+
 # Carica il JSON da un file
 try:
     with open('./src/assets/google_fonts_list.json', 'r') as f:
@@ -18,21 +21,19 @@ if 'fonts' not in data or not isinstance(data['fonts'], list):
     print("Il JSON non contiene la chiave 'fonts' o 'fonts' non è una lista.")
     exit()
 
-# ID di partenza (dopo 1396)
-new_id = 1
+# Filtra i font da escludere
+filtered_fonts = [font for font in data['fonts'] if font.get('name') not in excludedFonts]
 
-# Accedi alla lista di font
-fonts = data['fonts']
+# Riassegna gli ID ai font rimanenti
+for new_id, font in enumerate(filtered_fonts, start=1):
+    font['id'] = new_id
 
-# Riassegna gli ID
-for item in fonts:
-    if isinstance(item, dict) and 'id' in item:
-        # Riassegna l'ID
-        item['id'] = new_id
-        new_id += 1
+# Aggiorna il dato nel JSON
+data['fonts'] = filtered_fonts
 
 # Salva il JSON modificato in un nuovo file
-with open('google_fonts_list_updated.json', 'w') as f:
+with open('./src/assets/google_fonts_list_updated.json', 'w') as f:
     json.dump(data, f, indent=4)
 
-print("JSON modificato e salvato con successo!")
+print("Font esclusi e JSON aggiornato con successo!")
+
