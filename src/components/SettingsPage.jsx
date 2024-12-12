@@ -5,7 +5,6 @@ import { ArrowLeftToLine } from "lucide-react"
 import { useUltraInstinct } from "./SettingsContext";
 import {
     Divider,
-    Switch,
     Textarea,
     Modal,
     ModalContent,
@@ -19,8 +18,7 @@ import {
 export default function SettingsPage() {
     const { ultraInstinct, setUltraInstinct } = useUltraInstinct();
 
-    const handleDebugToggle = (event) => {
-        // setUltraInstinct(event.target.checked);
+    const handleDebugToggle = () => {
         setUltraInstinct((prevState) => !prevState);
     };
 
@@ -42,10 +40,10 @@ export default function SettingsPage() {
                     <div className="flex items-center lg:col-span-3">
                         <div>
                             <div>Enable Ultra Instinct</div>
-                            <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak!</div>
+                            <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak and prevent you from scoring any point!</div>
                         </div>
                     </div>
-                    <MyButton className={`text-base lg:text-lg${ultraInstinct ? " text-[#000000] bg-custom-green" : ""}`} onClickFunction={handleDebugToggle}>
+                    <MyButton className={`text-base lg:text-lg${ultraInstinct ? " text-[black] bg-custom-green" : ""}`} onClickFunction={handleDebugToggle}>
                         {!ultraInstinct ? "Enable" : "Disable"}
                     </MyButton>
 
@@ -62,7 +60,7 @@ export default function SettingsPage() {
 
 
 
-function TextChangeModal({ className }) {
+function TextChangeModal() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [textArea, setTextArea] = useState("");
     const maxChars = 140;
@@ -92,7 +90,6 @@ function TextChangeModal({ className }) {
 
     return (
         <>
-            {/* <div className={`flex justify-end${className ? " " + className : ""}`}> */}
             <MyButton className="text-base lg:text-lg" onClickFunction={onOpen}>Change</MyButton>
             <Modal isOpen={isOpen} size={"xl"} onOpenChange={onOpenChange} placement="center" className="m-4">
                 <ModalContent>
@@ -125,7 +122,6 @@ function TextChangeModal({ className }) {
                     )}
                 </ModalContent>
             </Modal>
-            {/* </div> */}
         </>
     );
 }

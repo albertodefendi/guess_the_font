@@ -16,7 +16,7 @@ export default {
         "custom-black-2": "#2a2a2a",
       },
       fontFamily: {
-        sans: ["Parkinsans", "ui-sans-serif", "system-ui"]
+        sans: ["Parkinsans", "ui-sans-serif", "system-ui"],
       },
       backgroundImage: {
         "main": "url('main_bg.webp')"
