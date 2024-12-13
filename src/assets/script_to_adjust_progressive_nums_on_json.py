@@ -3,7 +3,7 @@
 import json
 
 # Elenco dei font da escludere
-excludedFonts = ["Abhaya Libre", "Shippori Mincho", "Shippori Mincho B1", "Shippori Antique", "Shippori Antique B1"]
+excludedFonts = ["Abhaya Libre", "Shippori Mincho", "Shippori Mincho B1", "Shippori Antique", "Shippori Antique B1", "Sumana", "Hind", "Athiti", "Gowun Dodum", "Tajawal", "Nuosu SIL", "Molle", "Buda"]
 
 # Carica il JSON da un file
 try:
@@ -32,7 +32,7 @@ for new_id, font in enumerate(filtered_fonts, start=1):
 data['fonts'] = filtered_fonts
 
 # Salva il JSON modificato in un nuovo file
-with open('./src/assets/google_fonts_list_updated.json', 'w') as f:
+with open('./src/assets/google_fonts_list.json', 'w') as f:
     json.dump(data, f, indent=4)
 
 print("Font esclusi e JSON aggiornato con successo!")

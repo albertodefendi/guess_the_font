@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
-import { fontRegexUrl } from "./UtilityFunctions";
+import { fontRegexUrl, appendFontToHtml } from "./UtilityFunctions";
 
 export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
     const [guessError, setGuessError] = useState(false);
+    const [sentGuess, setSentGuess] = useState(false);
     const [showResults, setShowResults] = useState(false); // Controlla la visibilità dei risultati
     const inputRef = useRef(null); // Riferimento all'input
     const listRef = useRef(null); // Riferimento alla lista dei suggerimenti
@@ -51,6 +52,9 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     };
 
     const sendGuessedFont = () => {
+        setSentGuess(true);
+        if (query)
+            appendFontToHtml(query);
         if (fontsArray.includes(query)) {
             setShowResults(true);
             setGuessError(false);
@@ -61,6 +65,7 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     };
 
     const resetGame = () => {
+        setSentGuess(false);
         setShowResults(false);
         setQuery("");
         setGuessError(false);
@@ -109,7 +114,7 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     return (
         <div className="relative w-full flex flex-col gap-2">
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
-                <div className="relative w-full flex flex-col justify-center gap-2">
+                <div className="relative basis-5/6 flex flex-col justify-center gap-2">
                     <input
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
@@ -119,6 +124,7 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
                         onKeyDown={handleKeyDown}
                         onFocus={handleFocus} // Gestisce i suggerimenti al focus
                         placeholder="What's the font?"
+                        disabled={sentGuess ? true : false}
                     />
                     {suggestions.length > 0 && (
                         <ul
@@ -141,29 +147,34 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
                         </ul>
                     )}
                 </div>
-                <MyButton className="h-full" onClickFunction={sendGuessedFont}>Guess</MyButton>
+                { !sentGuess ? (
+                    <MyButton className="h-full basis-1/6" onClickFunction={sendGuessedFont}>Guess</MyButton>
+                ) : (
+                    <MyButton className="h-full basis-1/6" onClickFunction={resetGame}>Next</MyButton>
+                )}
             </div>
             {showResults && (
-                <div className="absolute top-[76px] w-full bg-custom-black-1 flex items-center p-4 gap-2 rounded-lg text-lg lg:text-2xl text-white">
-                    <div className="">
-                        <div className="flex gap-4 items-center">
-                            {guessError ? (
-                                <Check className="bg-green-600 rounded-full p-[2px]" size={32}></Check>
-                            ) : (
-                                <X className="bg-red-600 rounded-full p-[2px]" size={32}></X>
-                            )}
-                            <div className="grid grid-cols-2 gap-x-4">
-                                <div>Your guess:</div>
-                                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
+                <>
+                    <div className="absolute top-[76px] w-full flex items-center gap-2 text-lg lg:text-2xl text-white">
+                        <div className="w-full bg-custom-black-1 p-4 rounded-lg">
+                            <div className="flex gap-4 items-center">
+                                {guessError ? (
+                                    <Check className="bg-green-600 rounded-full p-[2px]" size={32}></Check>
+                                ) : (
+                                    <X className="bg-red-600 rounded-full p-[2px]" size={32}></X>
+                                )}
+                                <div className="grid grid-cols-2 gap-x-4">
+                                    <div>Your guess:</div>
+                                    <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
 
-                                <div>Answer:</div>
-                                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
+                                    <div>Answer:</div>
+                                    <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <MyButton onClickFunction={resetGame}>Try again</MyButton>
-                </div>
+                </>
             )}
         </div>
     );

@@ -20,7 +20,7 @@ export default {
       },
       backgroundImage: {
         "main": "url('main_bg.webp')"
-      }
+      },
     },
   },
   darkMode: "class",
