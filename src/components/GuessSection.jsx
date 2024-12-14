@@ -137,7 +137,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
     return (
         <div className="relative w-full flex flex-col gap-2">
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
-                <div className="relative basis-5/6 flex flex-col justify-center gap-2">
+                <div className="relative w-full flex flex-col justify-center gap-2">
                     <input
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
@@ -170,11 +170,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
                         </ul>
                     )}
                 </div>
-                {!sentGuess ? (
-                    <MyButton className="h-full basis-1/6" onClickFunction={sendGuessedFont}>Guess</MyButton>
-                ) : (
-                    <MyButton className="h-full basis-1/6" onClickFunction={resetGame}>Next</MyButton>
-                )}
+                <MyButton className="h-full min-w-28 lg:min-w-32" onClickFunction={!sentGuess ? sendGuessedFont : resetGame}>{!sentGuess ? "Guess" : "Next"}</MyButton>
             </div>
             {showResults && (
                 <>
@@ -195,7 +191,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
                                     </div>
 
                                     <div className="w-full flex text-center">
-                                        <div className={`basis-1/2 ${guessCorrect ? "text-green-600" : "text-red-600" }`}>
+                                        <div className={`basis-1/2 ${guessCorrect ? "text-green-600" : "text-red-600"}`}>
                                             <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
                                         </div>
                                         <div className="basis-1/2 text-green-600">
