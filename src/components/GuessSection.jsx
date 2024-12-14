@@ -3,7 +3,7 @@ import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
 import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
 
-export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
+export default function GuessSection({ fontsArray, handleGuess, currentFont, ultraInstinct }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
@@ -74,6 +74,18 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         localStorage.setItem("currentFont", getRandomFont());
     };
 
+    const sendUltraInstinctFont = () => {
+        if (!sentGuess) {
+            setQuery(currentFont)
+            setSentGuess(true);
+            appendFontToHtml(query);
+            setGuessCorrect(true);
+            setInputError(false);
+            setShowResults(true);
+            localStorage.setItem("currentFont", getRandomFont());
+        }
+    }
+
     const resetGame = () => {
         setSentGuess(false);
         setShowResults(false);
@@ -136,6 +148,12 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
 
     return (
         <div className="relative w-full flex flex-col gap-2">
+            {ultraInstinct && (
+                <div className="text-white text-base lg:text-xl">
+                    <span>Answer: </span>
+                    <span className="cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-transparent" onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
+                </div>
+            )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
                 <div className="relative w-full flex flex-col justify-center gap-2">
                     <input
@@ -152,7 +170,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
                     {suggestions.length > 0 && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-scroll z-50 rounded-lg"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-scroll z-10 rounded-lg"
                             role="listbox"
                             aria-label="Font suggestions"
                         >
@@ -174,7 +192,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
             </div>
             {showResults && (
                 <>
-                    <div className="absolute top-[76px] w-full flex items-center gap-2 text-lg lg:text-2xl text-white">
+                    <div className={`absolute z-20 w-full flex items-center gap-2 text-lg lg:text-2xl text-white ${ultraInstinct ? "top-28" : "top-20"}`}>
                         <div className={`w-full p-4 rounded-lg bg-custom-black-1`}>
                             <div className="flex items-center">
                                 <div className={`p-2 rounded-full ${guessCorrect ? "bg-green-600" : "bg-red-600"}`}>

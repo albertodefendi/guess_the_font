@@ -83,15 +83,15 @@ function HomePage() {
               {customText ||
                 "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
             </div>
-            {ultraInstinct && (
+            {/* {ultraInstinct && (
               <div className="text-white text-base lg:text-xl">
                 <span>Answer: </span>
                 <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
               </div>
-            )}
+            )} */}
           </div>
           <div className="flex gap-2">
-            <GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} setCurrentFont={setCurrentFont} />
+            <GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} ultraInstinct={ultraInstinct} />
           </div>
         </div>
         <div
