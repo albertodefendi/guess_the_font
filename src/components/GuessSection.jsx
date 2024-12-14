@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
 import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
+import { Autocomplete, AutocompleteSection, AutocompleteItem } from "@nextui-org/react";
 
 export default function GuessSection({ fontsArray, handleGuess, currentFont, ultraInstinct }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
@@ -151,12 +152,12 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             {ultraInstinct && (
                 <div className="text-white text-base lg:text-xl">
                     <span>Answer: </span>
-                    <span className="cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-transparent" onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
+                    <span className={`cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : ""}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
                 </div>
             )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
                 <div className="relative w-full flex flex-col justify-center gap-2">
-                    <input
+                    {/* <input
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
                         type="text"
@@ -166,7 +167,21 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                         onFocus={handleFocus} // Gestisce i suggerimenti al focus
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
-                    />
+                    /> */}
+                    <Autocomplete
+                        className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
+                        label="What's the font?"
+                        classNames={{
+                            base: "bg-red-300",
+                            // listboxWrapper: "bg-red-300",
+                            // listbox: "bg-red-300",
+                            // popoverContent: "bg-red-300"
+                        }}
+                    >
+                        {fontsArray.map((font) => (
+                            <AutocompleteItem key={font.id}>{font.name}</AutocompleteItem>
+                        ))}
+                    </Autocomplete>
                     {suggestions.length > 0 && (
                         <ul
                             ref={listRef}
