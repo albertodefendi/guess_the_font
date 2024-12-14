@@ -208,6 +208,3 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         </div>
     );
 }
-
-
-// TODO: fare in modo tale che al refresh prima del guess il font non cambi, ma dopo il guess e prima del next cambi

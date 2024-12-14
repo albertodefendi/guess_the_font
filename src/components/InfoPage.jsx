@@ -62,6 +62,3 @@ function UrlLink({ href, children }) {
         </>
     )
 }
-
-
-// TODO: Aggiungere altre info
