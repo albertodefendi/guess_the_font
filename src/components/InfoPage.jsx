@@ -24,7 +24,7 @@ export default function InfoPage({ fontsNumber, fontsDate }) {
                             </div>
                             <div>
                                 <div className="bg-custom-violet text-black font-bold px-1">HOW DOES IT WORK</div>
-                                <div className="my-2">The game ({fontsDate}) currently features {fontsNumber} fonts imported from <UrlLink href="https://fonts.google.com/?script=Latn">Google Fonts</UrlLink>, filtered for the Latin writing system.</div>
+                                <div className="my-2">The game (as of {fontsDate}) currently features {fontsNumber} fonts imported from <UrlLink href="https://fonts.google.com/?script=Latn">Google Fonts</UrlLink>, filtered for the Latin writing system.</div>
                                 <div className="my-2">(Un)fortunately, fonts are virtually infinite, but these few should provide a tough enough challenge. For now.</div>
                             </div>
                             <div>

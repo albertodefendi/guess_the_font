@@ -72,7 +72,7 @@ function HomePage() {
 
   return (
     <div className="bg-main min-h-screen flex justify-center items-center transition-opacity duration-500">
-      <div className="max-w-4xl grid p-4 gap-24 text-xl lg:text-3xl">
+      <div className="max-w-4xl grid p-4 gap-8 lg:gap-24 text-xl lg:text-3xl">
         <Title />
         <div className="grid gap-8">
           <div className="w-auto flex flex-col gap-4">
@@ -101,14 +101,14 @@ function HomePage() {
           <div>Current streak: {currentStreak}</div>
           <div>Highest streak: {highestStreak}</div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-24 lg:mt-0">
           <div className="flex flex-col gap-2 justify-center text-white text-sm">
             <div>Made by:&nbsp;
               <a href="https://albertodefendi.netlify.app" target="_blank" className="underline hover:text-custom-green">Alberto Defendi</a>
             </div>
             <div>v{projectVersion}</div>
           </div>
-          <div className="flex gap-4 ">
+          <div className="flex gap-4">
             {/* <Link to="/bug">
               <Bug
                 size={32}
