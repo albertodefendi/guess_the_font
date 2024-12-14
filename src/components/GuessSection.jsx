@@ -1,20 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
-import { fontRegexUrl, appendFontToHtml } from "./UtilityFunctions";
+import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
 
-export default function GuessSection({ fontsArray, guessClick, currentFont }) {
+export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
-    const [guessError, setGuessError] = useState(false);
+    const [inputError, setInputError] = useState(false); // Errore per input non valido
+    const [guessCorrect, setGuessCorrect] = useState(null); // Verifica se il guess è corretto
     const [sentGuess, setSentGuess] = useState(false);
     const [showResults, setShowResults] = useState(false); // Controlla la visibilità dei risultati
     const inputRef = useRef(null); // Riferimento all'input
     const listRef = useRef(null); // Riferimento alla lista dei suggerimenti
 
     const handleInputChange = (e) => {
-        setGuessError(false);
+        setInputError(false);
+        setGuessCorrect(null);
         const value = e.target.value;
         setQuery(value);
         setHighlightedIndex(-1); // Resetta l'indice evidenziato
@@ -52,24 +54,33 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
     };
 
     const sendGuessedFont = () => {
-        setSentGuess(true);
-        if (query)
-            appendFontToHtml(query);
-        if (fontsArray.includes(query)) {
-            setShowResults(true);
-            setGuessError(false);
-        } else {
-            setGuessError(true);
-            setShowResults(true);
+        if (!fontsArray.includes(query)) {
+            setInputError(true);
         }
+        else {
+            setSentGuess(true);
+            appendFontToHtml(query);
+
+            if (query === currentFont) {
+                setGuessCorrect(true);
+                setInputError(false);
+                setShowResults(true);
+            } else {
+                setGuessCorrect(false);
+                setInputError(false);
+                setShowResults(true);
+            }
+        }
+        localStorage.setItem("currentFont", getRandomFont());
     };
 
     const resetGame = () => {
         setSentGuess(false);
         setShowResults(false);
         setQuery("");
-        setGuessError(false);
-        guessClick(query); // Cambia il font corrente
+        setInputError(false);
+        setGuessCorrect(null);
+        handleGuess(query); // Cambia il font corrente solo dopo il guess
     };
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
@@ -111,12 +122,24 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
         }
     };
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (query) {
+                const filteredFonts = fontsArray.filter((font) =>
+                    font.toLowerCase().includes(query.toLowerCase())
+                );
+                setSuggestions(filteredFonts); // Supponendo che setSuggestions sia la funzione per aggiornare lo stato
+            }
+        }, 300);
+        return () => clearTimeout(timeout);
+    }, [query]);
+
     return (
         <div className="relative w-full flex flex-col gap-2">
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
                 <div className="relative basis-5/6 flex flex-col justify-center gap-2">
                     <input
-                        className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${guessError ? "border border-red-600 text-red-600" : ""}`}
+                        className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
                         type="text"
                         value={query}
@@ -147,7 +170,7 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
                         </ul>
                     )}
                 </div>
-                { !sentGuess ? (
+                {!sentGuess ? (
                     <MyButton className="h-full basis-1/6" onClickFunction={sendGuessedFont}>Guess</MyButton>
                 ) : (
                     <MyButton className="h-full basis-1/6" onClickFunction={resetGame}>Next</MyButton>
@@ -156,19 +179,29 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
             {showResults && (
                 <>
                     <div className="absolute top-[76px] w-full flex items-center gap-2 text-lg lg:text-2xl text-white">
-                        <div className="w-full bg-custom-black-1 p-4 rounded-lg">
-                            <div className="flex gap-4 items-center">
-                                {guessError ? (
-                                    <Check className="bg-green-600 rounded-full p-[2px]" size={32}></Check>
-                                ) : (
-                                    <X className="bg-red-600 rounded-full p-[2px]" size={32}></X>
-                                )}
-                                <div className="grid grid-cols-2 gap-x-4">
-                                    <div>Your guess:</div>
-                                    <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
+                        <div className={`w-full p-4 rounded-lg bg-custom-black-1`}>
+                            <div className="flex items-center">
+                                <div className={`p-2 rounded-full ${guessCorrect ? "bg-green-600" : "bg-red-600"}`}>
+                                    {guessCorrect ? (
+                                        <Check size={36}></Check>
+                                    ) : (
+                                        <X size={36}></X>
+                                    )}
+                                </div>
+                                <div className="w-full flex flex-col gap-y-2">
+                                    <div className="w-full flex text-center">
+                                        <div className="basis-1/2">Your guess</div>
+                                        <div className="basis-1/2">Answer</div>
+                                    </div>
 
-                                    <div>Answer:</div>
-                                    <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
+                                    <div className="w-full flex text-center">
+                                        <div className={`basis-1/2 ${guessCorrect ? "text-green-600" : "text-red-600" }`}>
+                                            <a href={`https://fonts.google.com/specimen/${fontRegexUrl(query)}`} target="_blank" style={{ fontFamily: query }}>{query}</a>
+                                        </div>
+                                        <div className="basis-1/2 text-green-600">
+                                            <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -181,5 +214,4 @@ export default function GuessSection({ fontsArray, guessClick, currentFont }) {
 }
 
 
-
-// TODO: aggiungere un div di esito del tentativo di indovinare, in cui si dice successo o errore e si mostra qual era il font corretto
+// TODO: fare in modo tale che al refresh prima del guess il font non cambi, ma dopo il guess e prima del next cambi

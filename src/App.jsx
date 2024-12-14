@@ -14,6 +14,7 @@ import { getRandomFont, appendFontToHtml, fontRegexUrl } from "./components/Util
 
 const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 const fontsNumber = fontsArray.length;
+const fontsDate = fonts.date;
 
 function HomePage() {
   const { ultraInstinct } = useUltraInstinct();
@@ -66,7 +67,7 @@ function HomePage() {
     } else {
       setCurrentStreak(0);
     }
-    setCurrentFont(getRandomFont());
+    setCurrentFont(localStorage.getItem("currentFont"));
   };
 
   return (
@@ -90,7 +91,7 @@ function HomePage() {
             )}
           </div>
           <div className="flex gap-2">
-            <GuessSection fontsArray={fontsArray} guessClick={handleGuess} currentFont={currentFont} />
+            <GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} setCurrentFont={setCurrentFont} />
           </div>
         </div>
         <div
@@ -140,7 +141,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/info" element={<InfoPage fontsNumber={fontsNumber} />} />
+          <Route path="/info" element={<InfoPage fontsNumber={fontsNumber} fontsDate={fontsDate} />} />
         </Routes>
       </Router>
     </SettingsProvider>

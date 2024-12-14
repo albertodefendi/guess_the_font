@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeftToLine } from "lucide-react"
 
-export default function InfoPage({ fontsNumber }) {
+export default function InfoPage({ fontsNumber, fontsDate }) {
     return (
         <>
             <div className="min-h-screen bg-main p-4 flex flex-col items-center justify-center text-white">
@@ -24,7 +24,7 @@ export default function InfoPage({ fontsNumber }) {
                             </div>
                             <div>
                                 <div className="bg-custom-violet text-black font-bold px-1">HOW DOES IT WORK</div>
-                                <div className="my-2">The game (as of 01 Dec 2024) currently features {fontsNumber} fonts imported from <UrlLink href="https://fonts.google.com/?script=Latn">Google Fonts</UrlLink>, filtered for the Latin writing system.</div>
+                                <div className="my-2">The game ({fontsDate}) currently features {fontsNumber} fonts imported from <UrlLink href="https://fonts.google.com/?script=Latn">Google Fonts</UrlLink>, filtered for the Latin writing system.</div>
                                 <div className="my-2">(Un)fortunately, fonts are virtually infinite, but these few should provide a tough enough challenge. For now.</div>
                             </div>
                             <div>
