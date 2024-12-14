@@ -19,7 +19,7 @@ export default {
         sans: ["Parkinsans", "ui-sans-serif", "system-ui"],
       },
       backgroundImage: {
-        "main": "url('main_bg.webp')"
+        "main": "url('/main_bg.webp')"
       },
     },
   },
