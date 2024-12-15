@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
 import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
-import { Autocomplete, AutocompleteSection, AutocompleteItem } from "@nextui-org/react";
 
 export default function GuessSection({ fontsArray, handleGuess, currentFont, ultraInstinct }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
+    const [suggestionsVisibility, setSuggestionsVisibility] = useState(false); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
     const [inputError, setInputError] = useState(false); // Errore per input non valido
     const [guessCorrect, setGuessCorrect] = useState(null); // Verifica se il guess è corretto
@@ -20,21 +20,30 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         setGuessCorrect(null);
         const value = e.target.value;
         setQuery(value);
-        setHighlightedIndex(-1); // Resetta l'indice evidenziato
-
+    
+        // Mostra suggerimenti solo se l'utente digita
         if (value.length > 0) {
             const filteredFonts = fontsArray.filter((font) =>
                 font.toLowerCase().includes(value.toLowerCase())
             );
             setSuggestions(filteredFonts);
         } else {
-            setSuggestions(fontsArray); // Mostra tutti i suggerimenti se non c'è input
+            setSuggestions([]); // Non mostra suggerimenti quando il campo è vuoto
         }
     };
 
     const handleSuggestionClick = (suggestion) => {
         setQuery(suggestion);
-        setSuggestions([]);
+        setSuggestions([]); // Chiude la lista
+        setSuggestionsVisibility(false);
+    };
+
+    // Modifica l'onFocus per evitare di riaprire l'elenco subito dopo il clic
+    const handleFocus = () => {
+        if (query === "" && suggestions.length === 0) {
+            setSuggestions(fontsArray); // Mostra suggerimenti solo se il campo è vuoto
+        }
+        setSuggestionsVisibility(true)
     };
 
     const handleKeyDown = (e) => {
@@ -49,8 +58,10 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         } else if (e.key === "Enter" && highlightedIndex >= 0) {
             setQuery(suggestions[highlightedIndex]);
             setSuggestions([]);
+            setSuggestionsVisibility(false);
         } else if (e.key === "Escape") {
             setSuggestions([]);
+            setSuggestionsVisibility(false);
         }
     };
 
@@ -88,6 +99,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     }
 
     const resetGame = () => {
+        setSuggestions(fontsArray)
         setSentGuess(false);
         setShowResults(false);
         setQuery("");
@@ -128,13 +140,6 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         }
     }, [highlightedIndex]);
 
-    // Aggiungi l'onFocus per gestire i suggerimenti a seconda della presenza o meno di una query
-    const handleFocus = () => {
-        if (query === "") {
-            setSuggestions(fontsArray); // Mostra tutti i suggerimenti se il campo è vuoto
-        }
-    };
-
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (query) {
@@ -157,7 +162,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
                 <div className="relative w-full flex flex-col justify-center gap-2">
-                    {/* <input
+                    <input
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
                         type="text"
@@ -167,26 +172,11 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                         onFocus={handleFocus} // Gestisce i suggerimenti al focus
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
-                    /> */}
-                    <Autocomplete
-                        isVirtualized
-                        className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
-                        label="What's the font?"
-                        classNames={{
-                            base: "bg-red-300",
-                            // listboxWrapper: "bg-red-300",
-                            // listbox: "bg-red-300",
-                            // popoverContent: "bg-red-300"
-                        }}
-                    >
-                        {fontsArray.map((font) => (
-                            <AutocompleteItem key={font.id}>{font.name}</AutocompleteItem>
-                        ))}
-                    </Autocomplete>
-                    {suggestions.length > 0 && (
+                    />
+                    {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-scroll z-10 rounded-lg"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg"
                             role="listbox"
                             aria-label="Font suggestions"
                         >
