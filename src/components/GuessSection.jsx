@@ -3,9 +3,10 @@ import MyButton from "./MyButton";
 import { Check, X } from 'lucide-react';
 import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
 
-export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
+export default function GuessSection({ fontsArray, handleGuess, currentFont, ultraInstinct }) {
     const [query, setQuery] = useState(""); // Valore corrente dell'input
     const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
+    const [suggestionsVisibility, setSuggestionsVisibility] = useState(false); // Lista dei suggerimenti
     const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
     const [inputError, setInputError] = useState(false); // Errore per input non valido
     const [guessCorrect, setGuessCorrect] = useState(null); // Verifica se il guess è corretto
@@ -19,21 +20,30 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         setGuessCorrect(null);
         const value = e.target.value;
         setQuery(value);
-        setHighlightedIndex(-1); // Resetta l'indice evidenziato
-
+    
+        // Mostra suggerimenti solo se l'utente digita
         if (value.length > 0) {
             const filteredFonts = fontsArray.filter((font) =>
                 font.toLowerCase().includes(value.toLowerCase())
             );
             setSuggestions(filteredFonts);
         } else {
-            setSuggestions(fontsArray); // Mostra tutti i suggerimenti se non c'è input
+            setSuggestions([]); // Non mostra suggerimenti quando il campo è vuoto
         }
     };
 
     const handleSuggestionClick = (suggestion) => {
         setQuery(suggestion);
-        setSuggestions([]);
+        setSuggestions([]); // Chiude la lista
+        setSuggestionsVisibility(false);
+    };
+
+    // Modifica l'onFocus per evitare di riaprire l'elenco subito dopo il clic
+    const handleFocus = () => {
+        if (query === "" && suggestions.length === 0) {
+            setSuggestions(fontsArray); // Mostra suggerimenti solo se il campo è vuoto
+        }
+        setSuggestionsVisibility(true)
     };
 
     const handleKeyDown = (e) => {
@@ -48,8 +58,10 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         } else if (e.key === "Enter" && highlightedIndex >= 0) {
             setQuery(suggestions[highlightedIndex]);
             setSuggestions([]);
+            setSuggestionsVisibility(false);
         } else if (e.key === "Escape") {
             setSuggestions([]);
+            setSuggestionsVisibility(false);
         }
     };
 
@@ -74,7 +86,20 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         localStorage.setItem("currentFont", getRandomFont());
     };
 
+    const sendUltraInstinctFont = () => {
+        if (!sentGuess) {
+            setQuery(currentFont)
+            setSentGuess(true);
+            appendFontToHtml(query);
+            setGuessCorrect(true);
+            setInputError(false);
+            setShowResults(true);
+            localStorage.setItem("currentFont", getRandomFont());
+        }
+    }
+
     const resetGame = () => {
+        setSuggestions(fontsArray)
         setSentGuess(false);
         setShowResults(false);
         setQuery("");
@@ -115,13 +140,6 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
         }
     }, [highlightedIndex]);
 
-    // Aggiungi l'onFocus per gestire i suggerimenti a seconda della presenza o meno di una query
-    const handleFocus = () => {
-        if (query === "") {
-            setSuggestions(fontsArray); // Mostra tutti i suggerimenti se il campo è vuoto
-        }
-    };
-
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (query) {
@@ -136,6 +154,12 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
 
     return (
         <div className="relative w-full flex flex-col gap-2">
+            {ultraInstinct && (
+                <div className="text-white text-base lg:text-xl">
+                    <span>Answer: </span>
+                    <span className={`cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : ""}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
+                </div>
+            )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
                 <div className="relative w-full flex flex-col justify-center gap-2">
                     <input
@@ -149,10 +173,10 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
                     />
-                    {suggestions.length > 0 && (
+                    {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-scroll z-50 rounded-lg"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg"
                             role="listbox"
                             aria-label="Font suggestions"
                         >
@@ -174,7 +198,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont }) {
             </div>
             {showResults && (
                 <>
-                    <div className="absolute top-[76px] w-full flex items-center gap-2 text-lg lg:text-2xl text-white">
+                    <div className={`absolute z-20 w-full flex items-center gap-2 text-lg lg:text-2xl text-white ${ultraInstinct ? "top-28" : "top-20"}`}>
                         <div className={`w-full p-4 rounded-lg bg-custom-black-1`}>
                             <div className="flex items-center">
                                 <div className={`p-2 rounded-full ${guessCorrect ? "bg-green-600" : "bg-red-600"}`}>

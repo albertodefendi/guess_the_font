@@ -43,7 +43,7 @@ export default function SettingsPage() {
                             <div className="text-red-400 text-xs lg:text-sm">Attention: enabling Ultra Instinct will reset your current streak and prevent you from scoring any point!</div>
                         </div>
                     </div>
-                    <MyButton className={`text-base lg:text-lg${ultraInstinct ? " text-[black] bg-custom-green" : ""}`} onClickFunction={handleDebugToggle}>
+                    <MyButton className={`text-base lg:text-lg${ultraInstinct ? " text-override-black bg-custom-green" : ""}`} onClickFunction={handleDebugToggle}>
                         {!ultraInstinct ? "Enable" : "Disable"}
                     </MyButton>
 

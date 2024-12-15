@@ -9,6 +9,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "override-black": "#000000",
         "custom-violet": "#9578d3",
         "custom-green": "#00ce7c",
         "custom-black": "#181c18",

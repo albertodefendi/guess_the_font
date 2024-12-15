@@ -74,7 +74,7 @@ function HomePage() {
     <div className="bg-main min-h-screen flex justify-center items-center transition-opacity duration-500">
       <div className="max-w-4xl grid p-4 gap-8 lg:gap-24 text-xl lg:text-3xl">
         <Title />
-        <div className="grid gap-8">
+        <div className="w-full grid gap-8">
           <div className="w-auto flex flex-col gap-4">
             <div
               className="w-full min-h-48 p-8 flex justify-center items-center text-center bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl [overflow-wrap:anywhere]"
@@ -83,15 +83,9 @@ function HomePage() {
               {customText ||
                 "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
             </div>
-            {ultraInstinct && (
-              <div className="text-white text-base lg:text-xl">
-                <span>Answer: </span>
-                <a href={`https://fonts.google.com/specimen/${fontRegexUrl(currentFont)}`} target="_blank" style={{ fontFamily: currentFont }}>{currentFont}</a>
-              </div>
-            )}
           </div>
           <div className="flex gap-2">
-            <GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} setCurrentFont={setCurrentFont} />
+            <GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} ultraInstinct={ultraInstinct} />
           </div>
         </div>
         <div
