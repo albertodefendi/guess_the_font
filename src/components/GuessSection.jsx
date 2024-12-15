@@ -169,6 +169,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                         disabled={sentGuess ? true : false}
                     /> */}
                     <Autocomplete
+                        isVirtualized
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         label="What's the font?"
                         classNames={{

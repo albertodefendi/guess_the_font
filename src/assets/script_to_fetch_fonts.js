@@ -13,7 +13,9 @@
         // Estrai i font visibili attualmente
         document.querySelectorAll('.gf-block-anchor__text').forEach((el) => {
             const fontName = el.textContent.trim();
-            fontSet.add(fontName);
+            if (!fontName.toLowerCase().includes("guides")) { // Escludi i font con "guides" nel nome
+                fontSet.add(fontName);
+            }
         });
 
         // Scrolla di SCROLL_STEP pixel
@@ -36,11 +38,21 @@
         name: fontName
     }));
 
+    // Ottieni la data odierna nel formato "15 Dec 2024"
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    }).replace(/ /g, ' ');
+
     // Struttura finale del JSON
-    const fontsJson = { fonts };
+    const fontsJson = {
+        date: formattedDate, // Aggiungi la data odierna
+        fonts
+    };
 
     console.log('Totale font estratti:', fonts.length);
-    console.log('Esempio font:', fonts.slice(0, 10));
 
     // Salva il JSON in un file
     const blob = new Blob([JSON.stringify(fontsJson, null, 2)], { type: 'application/json' });
@@ -51,3 +63,5 @@
     a.click();
     URL.revokeObjectURL(url);
 })();
+
+
