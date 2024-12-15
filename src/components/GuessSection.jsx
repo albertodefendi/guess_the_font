@@ -165,18 +165,19 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                     <input
                         className={`w-full bg-custom-black-1 text-white p-4 rounded-lg focus-visible:outline-none ${inputError ? "border border-red-600 text-red-600" : ""}`}
                         ref={inputRef}
-                        type="text"
+                        type="search"
                         value={query}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         onFocus={handleFocus} // Gestisce i suggerimenti al focus
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
+                        autocomplete="off"
                     />
                     {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow"
                             role="listbox"
                             aria-label="Font suggestions"
                         >
