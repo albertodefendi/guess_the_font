@@ -90,7 +90,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         if (!sentGuess) {
             setQuery(currentFont)
             setSentGuess(true);
-            appendFontToHtml(query);
+            appendFontToHtml(currentFont);
             setGuessCorrect(true);
             setInputError(false);
             setShowResults(true);
@@ -157,7 +157,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             {ultraInstinct && (
                 <div className="text-white text-base lg:text-xl">
                     <span>Answer: </span>
-                    <span className={`cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : ""}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
+                    <span className={`cursor-pointer hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : "blur-sm bg-white"}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
                 </div>
             )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
