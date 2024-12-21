@@ -115,20 +115,15 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
     useEffect(() => {
+        let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
         let isKeyboardOpen = false;
     
-        const isMobile = () => {
-            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        };
-    
         const handleResize = () => {
-            if (isMobile()) {
-                // Controlla se la tastiera virtuale è aperta
-                if (window.innerHeight < document.documentElement.clientHeight) {
-                    isKeyboardOpen = true; // La tastiera virtuale è probabilmente aperta
-                } else {
-                    isKeyboardOpen = false; // La tastiera è chiusa
-                }
+            // Controlla se la tastiera virtuale è aperta
+            if (window.innerHeight < initialInnerHeight) {
+                isKeyboardOpen = true;
+            } else {
+                isKeyboardOpen = false;
             }
         };
     
@@ -150,23 +145,17 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             }
         };
     
-        if (isMobile()) {
-            // Listener solo per dispositivi mobili
-            window.addEventListener("resize", handleResize);
-        }
-    
+        // Listener per il ridimensionamento e clic
+        window.addEventListener("resize", handleResize);
         document.addEventListener("mousedown", handleClickOutside);
     
-        // Esegui il controllo iniziale della resize
-        handleResize();
-    
         return () => {
-            if (isMobile()) {
-                window.removeEventListener("resize", handleResize);
-            }
+            // Rimuove i listener quando il componente viene smontato
+            window.removeEventListener("resize", handleResize);
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);    
+    }, []);
+    
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
     useEffect(() => {
@@ -218,7 +207,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                     {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow touch-auto"
                             role="listbox"
                             aria-label="Font suggestions"
                         >
