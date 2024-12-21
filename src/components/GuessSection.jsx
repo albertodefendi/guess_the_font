@@ -65,6 +65,12 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         }
     };
 
+    const appendNewFont = () => {
+        const randomFont = getRandomFont();
+        appendFontToHtml(randomFont)
+        localStorage.setItem("currentFont", randomFont);
+    }
+
     const sendGuessedFont = () => {
         if (!fontsArray.includes(query)) {
             setInputError(true);
@@ -83,28 +89,27 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 setShowResults(true);
             }
         }
-        localStorage.setItem("currentFont", getRandomFont());
+        appendNewFont();
     };
 
     const sendUltraInstinctFont = () => {
         if (!sentGuess) {
             setQuery(currentFont)
             setSentGuess(true);
-            appendFontToHtml(currentFont);
             setGuessCorrect(true);
             setInputError(false);
             setShowResults(true);
-            localStorage.setItem("currentFont", getRandomFont());
+            appendNewFont()
         }
     }
 
     const resetGame = () => {
-        setSuggestions(fontsArray)
-        setSentGuess(false);
-        setShowResults(false);
         setQuery("");
-        setInputError(false);
+        setSentGuess(false);
         setGuessCorrect(null);
+        setInputError(false);
+        setShowResults(false);
+        setSuggestions(fontsArray)
         handleGuess(query); // Cambia il font corrente solo dopo il guess
     };
 
@@ -113,12 +118,18 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
         let isKeyboardOpen = false;
     
+        const isMobile = () => {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        };
+    
         const handleResize = () => {
-            // Controlla se la tastiera virtuale è aperta
-            if (window.innerHeight < initialInnerHeight) {
-                isKeyboardOpen = true;
-            } else {
-                isKeyboardOpen = false;
+            if (isMobile()) {
+                // Controlla se la tastiera virtuale è aperta
+                if (window.innerHeight < initialInnerHeight) {
+                    isKeyboardOpen = true;
+                } else {
+                    isKeyboardOpen = false;
+                }
             }
         };
     
@@ -140,16 +151,20 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             }
         };
     
-        // Listener per il ridimensionamento e clic
-        window.addEventListener("resize", handleResize);
+        if (isMobile()) {
+            // Listener solo per dispositivi mobili
+            window.addEventListener("resize", handleResize);
+        }
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
-            // Rimuove i listener quando il componente viene smontato
-            window.removeEventListener("resize", handleResize);
+            if (isMobile()) {
+                window.removeEventListener("resize", handleResize);
+            }
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+    
     
 
     // Effetto per gestire lo scroll dell'elemento evidenziato

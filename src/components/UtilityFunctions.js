@@ -1,26 +1,39 @@
-import fonts from "../assets/google_fonts_list.json"
+import fonts from "../assets/google_fonts_list.json";
 
+
+
+
+/* ------------------------------------------------------------------
+Funzione per conversione di una stringa in una stringa url encoded
+-------------------------------------------------------------------*/
 export const fontRegexUrl = (font) => {
     return font.replace(/\s+/g, "+");
-}
+};
 
+
+
+
+
+/* ------------------------------------------------------------------
+Funzione per ottenimento di un font casuale dall'array json
+-------------------------------------------------------------------*/
 export const getRandomFont = () => {
     const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
     const randomIndex = Math.floor(Math.random() * fontsArray.length);
-    const fontName = fontRegexUrl(fontsArray[randomIndex]);
+    return fontsArray[randomIndex];
+};
 
-    // Controlla se il link è già presente
+
+
+
+/* ------------------------------------------------------------------
+Funzione per fare l'append di un font nell'head
+-------------------------------------------------------------------*/
+export const appendFontToHtml = async (fontName) => {
     const existingLink = Array.from(document.head.getElementsByTagName("link"))
         .find(link => link.href.includes(fontName));
+    if (existingLink) return; // Il font è già stato aggiunto
 
-    if (!existingLink) {
-        appendFontToHtml(fontName);
-    }
-
-    return fontsArray[randomIndex];
-}
-
-export const appendFontToHtml = async (fontName) => {
     const weights = [400, 500, 600, 700, 900, 100, 200, 300]; // Pesi comuni da provare
     const baseUrl = "https://fonts.googleapis.com/css2?family=";
     const queryParams = "&display=swap";
@@ -55,7 +68,13 @@ export const appendFontToHtml = async (fontName) => {
     console.error(`"${fontName}" can't be loaded`);
 };
 
-// Funzione per creare il tag <link> e aggiungerlo all'head
+
+
+
+
+/* ------------------------------------------------------------------
+Funzione per creare il tag <link> e aggiungerlo all'head
+-------------------------------------------------------------------*/
 const appendLinkToHead = (url) => {
     const link = document.createElement("link");
     link.href = url;
@@ -63,6 +82,13 @@ const appendLinkToHead = (url) => {
     document.head.appendChild(link);
 };
 
+
+
+
+
+/* ------------------------------------------------------------------
+Funzione per rimuovere un font dall'head
+-------------------------------------------------------------------*/
 export const removeFontFromHead = (fontName) => {
     const head = document.head;
     const links = head.querySelectorAll("link[rel='stylesheet']");
@@ -72,6 +98,3 @@ export const removeFontFromHead = (fontName) => {
         }
     });
 };
-
-
-export default function() {}
