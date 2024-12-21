@@ -73,7 +73,7 @@ function HomePage() {
   return (
     <div className="bg-main min-h-screen flex justify-center items-center transition-opacity duration-500">
       <div className="max-w-4xl grid p-4 gap-8 lg:gap-24 text-xl lg:text-3xl">
-        <Title />
+        <Title currentGuessFont={currentFont}/>
         <div className="w-full grid gap-8">
           <div className="w-auto flex flex-col gap-4">
             <div

@@ -110,7 +110,26 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
     useEffect(() => {
+        let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
+        let isKeyboardOpen = false;
+    
+        const handleResize = () => {
+            // Controlla se la tastiera virtuale è aperta
+            if (window.innerHeight < initialInnerHeight) {
+                isKeyboardOpen = true;
+            } else {
+                isKeyboardOpen = false;
+            }
+        };
+    
         const handleClickOutside = (event) => {
+            // Ignora il primo tocco se la tastiera è aperta
+            if (isKeyboardOpen) {
+                isKeyboardOpen = false; // Resetta il flag
+                return;
+            }
+    
+            // Verifica se l'evento è al di fuori del componente
             if (
                 inputRef.current &&
                 !inputRef.current.contains(event.target) &&
@@ -120,12 +139,18 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 setSuggestions([]);
             }
         };
-
+    
+        // Listener per il ridimensionamento e clic
+        window.addEventListener("resize", handleResize);
         document.addEventListener("mousedown", handleClickOutside);
+    
         return () => {
+            // Rimuove i listener quando il componente viene smontato
+            window.removeEventListener("resize", handleResize);
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+    
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
     useEffect(() => {

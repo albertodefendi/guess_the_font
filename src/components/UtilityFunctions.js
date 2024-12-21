@@ -7,7 +7,6 @@ export const fontRegexUrl = (font) => {
 export const getRandomFont = () => {
     const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
     const randomIndex = Math.floor(Math.random() * fontsArray.length);
-    // const fontName = fontsArray[randomIndex].replace(/\s+/g, "+");
     const fontName = fontRegexUrl(fontsArray[randomIndex]);
 
     // Controlla se il link è già presente
@@ -62,6 +61,16 @@ const appendLinkToHead = (url) => {
     link.href = url;
     link.rel = "stylesheet";
     document.head.appendChild(link);
+};
+
+export const removeFontFromHead = (fontName) => {
+    const head = document.head;
+    const links = head.querySelectorAll("link[rel='stylesheet']");
+    links.forEach((link) => {
+        if (link.href.includes(fontRegexUrl(fontName))) {
+            head.removeChild(link);
+        }
+    });
 };
 
 

@@ -1,51 +1,48 @@
 import { useEffect, useState } from "react";
-import { getRandomFont } from "./UtilityFunctions";
+import { getRandomFont, removeFontFromHead } from "./UtilityFunctions";
 
 const title = "Guess The Font"; // h1 della pagina
+const letters = title.split("");
 
-export default function FontChanger() {
-    const [fontsPerLetter, setFontsPerLetter] = useState([]);
+export default function Title({ currentGuessFont }) {
+    const [fontsPerLetter, setFontsPerLetter] = useState(() =>
+        letters.map(() => getRandomFont())
+    );
 
     useEffect(() => {
-        // Imposta il font iniziale per ogni lettera
-        const initialFonts = title.split("").map(() => getRandomFont());
-        setFontsPerLetter(initialFonts);
-
-        // Cambia il font di una lettera casuale ogni 3 secondi
         const interval = setInterval(() => {
-            const randomIndex = Math.floor(Math.random() * title.length);
+            const randomIndex = Math.floor(Math.random() * letters.length);
+
             setFontsPerLetter((prevFonts) => {
                 const newFonts = [...prevFonts];
-                newFonts[randomIndex] = getRandomFont();
+                const currentLetterFont = prevFonts[randomIndex]; // Font corrente della lettera
+                const newFont = getRandomFont(); // Nuovo font
+
+                // Rimuovi il font corrente dall'head se diverso da currentGuessFont
+                if (currentLetterFont !== currentGuessFont) {
+                    removeFontFromHead(currentLetterFont);
+                }
+
+                // Aggiorna il font della lettera
+                newFonts[randomIndex] = newFont;
                 return newFonts;
             });
         }, 5000);
 
-        // Pulisce l'intervallo quando il componente viene smontato
-        return () => clearInterval(interval);
-    }, []);
+        return () => clearInterval(interval); // Pulisce l'intervallo
+    }, []); // Effettua il check su currentGuessFont
 
     return (
         <h1 className="text-6xl lg:text-7xl text-white text-center">
-            {title.split("").map((letter, index) => (
-                letter === " " ? (
-                    <span
-                        key={index}
-                        className="mx-1"
-                    >
-                        {letter}
-                    </span>
-                ) : (
-                    <span
-                        key={index}
-                        className="mx-1 text-custom-green"
-                        style={{ fontFamily: fontsPerLetter[index] }}
-                    >
-                        {letter}
-                    </span>
-                )
+            {letters.map((letter, index) => (
+                <span
+                    key={index}
+                    className={letter === " " ? "mx-1" : "mx-1 text-custom-green"}
+                    style={letter === " " ? undefined : { fontFamily: fontsPerLetter[index] }}
+                >
+                    {letter}
+                </span>
             ))}
         </h1>
     );
-
-};
+}
