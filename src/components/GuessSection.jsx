@@ -115,7 +115,6 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
     useEffect(() => {
-        let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
         let isKeyboardOpen = false;
     
         const isMobile = () => {
@@ -125,10 +124,10 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         const handleResize = () => {
             if (isMobile()) {
                 // Controlla se la tastiera virtuale è aperta
-                if (window.innerHeight < initialInnerHeight) {
-                    isKeyboardOpen = true;
+                if (window.innerHeight < document.documentElement.clientHeight) {
+                    isKeyboardOpen = true; // La tastiera virtuale è probabilmente aperta
                 } else {
-                    isKeyboardOpen = false;
+                    isKeyboardOpen = false; // La tastiera è chiusa
                 }
             }
         };
@@ -155,7 +154,11 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             // Listener solo per dispositivi mobili
             window.addEventListener("resize", handleResize);
         }
+    
         document.addEventListener("mousedown", handleClickOutside);
+    
+        // Esegui il controllo iniziale della resize
+        handleResize();
     
         return () => {
             if (isMobile()) {
@@ -163,9 +166,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             }
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
-    
-    
+    }, []);    
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
     useEffect(() => {
