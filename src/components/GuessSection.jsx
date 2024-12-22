@@ -189,6 +189,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
 
         const handleTouchMove = (e) => {
             e.stopPropagation(); // Impedisce la propagazione dell'evento al body
+            e.preventDefault();
         };
 
         scrollableElement.addEventListener("touchmove", handleTouchMove);
