@@ -14,7 +14,6 @@
 }
 
 .internal-overflow {
-  touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 }
 

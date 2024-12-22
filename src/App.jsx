@@ -88,9 +88,7 @@ function HomePage() {
 								"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
 						</div>
 					</div>
-					<div className="flex gap-2">
-						<GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} ultraInstinct={ultraInstinct} />
-					</div>
+					<GuessSection fontsArray={fontsArray} handleGuess={handleGuess} currentFont={currentFont} ultraInstinct={ultraInstinct} />
 				</div>
 				<div
 					className={`grid gap-4 text-lg lg:text-2xl justify-center ${ultraInstinct ? "text-zinc-500" : "text-white"

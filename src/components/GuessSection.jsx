@@ -12,6 +12,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     const [guessCorrect, setGuessCorrect] = useState(null); // Verifica se il guess è corretto
     const [sentGuess, setSentGuess] = useState(false);
     const [showResults, setShowResults] = useState(false); // Controlla la visibilità dei risultati
+    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
     const inputRef = useRef(null); // Riferimento all'input
     const listRef = useRef(null); // Riferimento alla lista dei suggerimenti
 
@@ -101,7 +102,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             setShowResults(true);
             appendNewFont()
         }
-    }
+    };
 
     const resetGame = () => {
         setQuery("");
@@ -114,47 +115,56 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     };
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
+    const isMobile = navigator.maxTouchPoints > 0;
     useEffect(() => {
-        let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
-        let isKeyboardOpen = false;
-
-        const handleResize = () => {
-            // Controlla se la tastiera virtuale è aperta
-            if (window.innerHeight < initialInnerHeight) {
-                isKeyboardOpen = true;
-            } else {
-                isKeyboardOpen = false;
-            }
-        };
-
+        // Funzione per gestire il clic fuori dal div
         const handleClickOutside = (event) => {
-            // Ignora il primo tocco se la tastiera è aperta
             if (isKeyboardOpen) {
-                isKeyboardOpen = false; // Resetta il flag
-                return;
+                return; // Non chiudere i suggerimenti se la tastiera è aperta
             }
 
-            // Verifica se l'evento è al di fuori del componente
+            // Verifica se il clic è fuori dall'input e dalla lista dei suggerimenti
             if (
                 inputRef.current &&
                 !inputRef.current.contains(event.target) &&
                 listRef.current &&
                 !listRef.current.contains(event.target)
             ) {
-                setSuggestions([]);
+                setSuggestions([]); // Chiudi la lista dei suggerimenti
             }
         };
 
-        // Listener per il ridimensionamento e clic
-        window.addEventListener("resize", handleResize);
+        // Gestire l'apertura e la chiusura della tastiera, solo su dispositivi mobili
+        const handleFocus = () => {
+            if (isMobile) {
+                setIsKeyboardOpen(true); // La tastiera è aperta
+            }
+        };
+
+        const handleBlur = () => {
+            if (isMobile) {
+                setIsKeyboardOpen(false); // La tastiera è chiusa
+            }
+        };
+
+        // Aggiungi eventi per clic fuori dal componente
         document.addEventListener("mousedown", handleClickOutside);
 
+        // Aggiungi eventi focus e blur per rilevare l'apertura della tastiera, solo su mobile
+        if (inputRef.current && isMobile) {
+            inputRef.current.addEventListener("focus", handleFocus);
+            inputRef.current.addEventListener("blur", handleBlur);
+        }
+
         return () => {
-            // Rimuove i listener quando il componente viene smontato
-            window.removeEventListener("resize", handleResize);
+            // Rimuovi gli event listeners quando il componente viene smontato
             document.removeEventListener("mousedown", handleClickOutside);
+            if (inputRef.current && isMobile) {
+                inputRef.current.removeEventListener("focus", handleFocus);
+                inputRef.current.removeEventListener("blur", handleBlur);
+            }
         };
-    }, []);
+    }, [isKeyboardOpen, isMobile]);
 
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
@@ -182,23 +192,6 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         return () => clearTimeout(timeout);
     }, [query]);
 
-    useEffect(() => {
-        const scrollableElement = listRef.current;
-
-        if (!scrollableElement) return;
-
-        const handleTouchMove = (e) => {
-            e.stopPropagation(); // Impedisce la propagazione dell'evento al body
-            e.preventDefault();
-        };
-
-        scrollableElement.addEventListener("touchmove", handleTouchMove);
-
-        return () => {
-            scrollableElement.removeEventListener("touchmove", handleTouchMove);
-        };
-    }, []);
-
     return (
         <div className="relative w-full flex flex-col gap-2">
             {ultraInstinct && (
@@ -219,7 +212,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                         onFocus={handleFocus} // Gestisce i suggerimenti al focus
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
-                        autocomplete="off"
+                        autoComplete="off"
                     />
                     {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
@@ -227,6 +220,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                             className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow touch-auto"
                             role="listbox"
                             aria-label="Font suggestions"
+                            id="suggestions"
                         >
                             {suggestions.map((suggestion, index) => (
                                 <li
