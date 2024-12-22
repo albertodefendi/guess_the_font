@@ -1,51 +1,61 @@
-import { useEffect, useState } from "react";
-import { getRandomFont } from "./UtilityFunctions";
+import { useEffect, useState, useRef } from "react";
+import { getRandomFont, appendFontToHtml, removeFontFromHead } from "./UtilityFunctions";
 
 const title = "Guess The Font"; // h1 della pagina
+const letters = title.split("");
 
-export default function FontChanger() {
+export default function Title({ currentGuessFont }) {
     const [fontsPerLetter, setFontsPerLetter] = useState([]);
+    const fontsRef = useRef([]); // Mantiene il riferimento ai font attuali
+
+    // Funzione per inizializzare i font per ogni lettera
+    const initializeFonts = () => {
+        const initialFonts = letters.map((letter) => {
+            const font = getRandomFont();
+            appendFontToHtml(font);
+            return font;
+        });
+        setFontsPerLetter(initialFonts);
+        fontsRef.current = initialFonts; // Aggiorna il riferimento
+    };
 
     useEffect(() => {
-        // Imposta il font iniziale per ogni lettera
-        const initialFonts = title.split("").map(() => getRandomFont());
-        setFontsPerLetter(initialFonts);
+        initializeFonts();
 
-        // Cambia il font di una lettera casuale ogni 3 secondi
         const interval = setInterval(() => {
-            const randomIndex = Math.floor(Math.random() * title.length);
-            setFontsPerLetter((prevFonts) => {
-                const newFonts = [...prevFonts];
-                newFonts[randomIndex] = getRandomFont();
-                return newFonts;
-            });
-        }, 5000);
+            const randomIndex = Math.floor(Math.random() * letters.length);
+            const currentFonts = [...fontsRef.current]; // Recupera i font correnti
+            const oldFont = currentFonts[randomIndex];
+            const newFont = getRandomFont();
 
-        // Pulisce l'intervallo quando il componente viene smontato
-        return () => clearInterval(interval);
+            appendFontToHtml(newFont);
+            if (oldFont !== currentGuessFont) {
+                removeFontFromHead(oldFont);
+            }
+
+            // Aggiorna i font nel riferimento e nello stato
+            currentFonts[randomIndex] = newFont;
+            fontsRef.current = currentFonts;
+            setFontsPerLetter(currentFonts);
+        }, 3000);
+
+        return () => {
+            clearInterval(interval);
+            fontsRef.current.forEach((font) => removeFontFromHead(font)); // Pulisci i font
+        };
     }, []);
 
     return (
         <h1 className="text-6xl lg:text-7xl text-white text-center">
-            {title.split("").map((letter, index) => (
-                letter === " " ? (
-                    <span
-                        key={index}
-                        className="mx-1"
-                    >
-                        {letter}
-                    </span>
-                ) : (
-                    <span
-                        key={index}
-                        className="mx-1 text-custom-green"
-                        style={{ fontFamily: fontsPerLetter[index] }}
-                    >
-                        {letter}
-                    </span>
-                )
+            {letters.map((letter, index) => (
+                <span
+                    key={index}
+                    className={letter === " " ? "mx-1" : "mx-1 text-custom-green"}
+                    style={letter === " " ? undefined : { fontFamily: fontsPerLetter[index] }}
+                >
+                    {letter}
+                </span>
             ))}
         </h1>
     );
-
-};
+}

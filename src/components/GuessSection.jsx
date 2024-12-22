@@ -65,6 +65,12 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         }
     };
 
+    const appendNewFont = () => {
+        const randomFont = getRandomFont();
+        appendFontToHtml(randomFont)
+        localStorage.setItem("currentFont", randomFont);
+    }
+
     const sendGuessedFont = () => {
         if (!fontsArray.includes(query)) {
             setInputError(true);
@@ -83,34 +89,52 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 setShowResults(true);
             }
         }
-        localStorage.setItem("currentFont", getRandomFont());
+        appendNewFont();
     };
 
     const sendUltraInstinctFont = () => {
         if (!sentGuess) {
             setQuery(currentFont)
             setSentGuess(true);
-            appendFontToHtml(query);
             setGuessCorrect(true);
             setInputError(false);
             setShowResults(true);
-            localStorage.setItem("currentFont", getRandomFont());
+            appendNewFont()
         }
     }
 
     const resetGame = () => {
-        setSuggestions(fontsArray)
-        setSentGuess(false);
-        setShowResults(false);
         setQuery("");
-        setInputError(false);
+        setSentGuess(false);
         setGuessCorrect(null);
+        setInputError(false);
+        setShowResults(false);
+        setSuggestions(fontsArray)
         handleGuess(query); // Cambia il font corrente solo dopo il guess
     };
 
     // Effetto per chiudere il menu quando si clicca fuori dal componente
     useEffect(() => {
+        let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
+        let isKeyboardOpen = false;
+    
+        const handleResize = () => {
+            // Controlla se la tastiera virtuale è aperta
+            if (window.innerHeight < initialInnerHeight) {
+                isKeyboardOpen = true;
+            } else {
+                isKeyboardOpen = false;
+            }
+        };
+    
         const handleClickOutside = (event) => {
+            // Ignora il primo tocco se la tastiera è aperta
+            if (isKeyboardOpen) {
+                isKeyboardOpen = false; // Resetta il flag
+                return;
+            }
+    
+            // Verifica se l'evento è al di fuori del componente
             if (
                 inputRef.current &&
                 !inputRef.current.contains(event.target) &&
@@ -120,12 +144,18 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 setSuggestions([]);
             }
         };
-
+    
+        // Listener per il ridimensionamento e clic
+        window.addEventListener("resize", handleResize);
         document.addEventListener("mousedown", handleClickOutside);
+    
         return () => {
+            // Rimuove i listener quando il componente viene smontato
+            window.removeEventListener("resize", handleResize);
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+    
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
     useEffect(() => {
@@ -157,7 +187,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
             {ultraInstinct && (
                 <div className="text-white text-base lg:text-xl">
                     <span>Answer: </span>
-                    <span className={`cursor-pointer blur-sm bg-white hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : ""}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
+                    <span className={`cursor-pointer hover:blur-none duration-100 hover:bg-inherit ${sentGuess ? "blur-none bg-inherit" : "blur-sm bg-white"}`} onClick={sendUltraInstinctFont} style={{ fontFamily: currentFont }}>{currentFont}</span>
                 </div>
             )}
             <div className="w-full flex gap-2 text-lg lg:text-2xl">
@@ -177,7 +207,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                     {(suggestions.length > 0 && suggestionsVisibility) && (
                         <ul
                             ref={listRef}
-                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow"
+                            className="absolute top-16 lg:top-[72px] w-full max-h-72 overflow-y-auto z-10 rounded-lg internal-overflow touch-auto"
                             role="listbox"
                             aria-label="Font suggestions"
                         >

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: "Parkinsans";
   src: url("../public/fonts/Parkinsans-Regular.ttf") format("truetype");
