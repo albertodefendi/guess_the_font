@@ -20,7 +20,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         setGuessCorrect(null);
         const value = e.target.value;
         setQuery(value);
-    
+
         // Mostra suggerimenti solo se l'utente digita
         if (value.length > 0) {
             const filteredFonts = fontsArray.filter((font) =>
@@ -117,7 +117,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     useEffect(() => {
         let initialInnerHeight = window.innerHeight; // Altezza iniziale della finestra
         let isKeyboardOpen = false;
-    
+
         const handleResize = () => {
             // Controlla se la tastiera virtuale è aperta
             if (window.innerHeight < initialInnerHeight) {
@@ -126,14 +126,14 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 isKeyboardOpen = false;
             }
         };
-    
+
         const handleClickOutside = (event) => {
             // Ignora il primo tocco se la tastiera è aperta
             if (isKeyboardOpen) {
                 isKeyboardOpen = false; // Resetta il flag
                 return;
             }
-    
+
             // Verifica se l'evento è al di fuori del componente
             if (
                 inputRef.current &&
@@ -144,18 +144,18 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 setSuggestions([]);
             }
         };
-    
+
         // Listener per il ridimensionamento e clic
         window.addEventListener("resize", handleResize);
         document.addEventListener("mousedown", handleClickOutside);
-    
+
         return () => {
             // Rimuove i listener quando il componente viene smontato
             window.removeEventListener("resize", handleResize);
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    
+
 
     // Effetto per gestire lo scroll dell'elemento evidenziato
     useEffect(() => {
@@ -181,6 +181,22 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         }, 300);
         return () => clearTimeout(timeout);
     }, [query]);
+
+    useEffect(() => {
+        const scrollableElement = listRef.current;
+
+        if (!scrollableElement) return;
+
+        const handleTouchMove = (e) => {
+            e.stopPropagation(); // Impedisce la propagazione dell'evento al body
+        };
+
+        scrollableElement.addEventListener("touchmove", handleTouchMove);
+
+        return () => {
+            scrollableElement.removeEventListener("touchmove", handleTouchMove);
+        };
+    }, []);
 
     return (
         <div className="relative w-full flex flex-col gap-2">
