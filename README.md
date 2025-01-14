@@ -4,7 +4,7 @@
 But wait, seriously, the main concept is actually to get people to discover new fonts and improve their knowledge about typography. Or at least this was the initial purpose.
 
 # HOW DOES IT WORK
-The game (as of 14 Jan 2025) currently features 1491 fonts imported from Google Fonts, filtered for the Latin writing system.
+The game (as of 14 Jan 2025) currently features 1490 fonts imported from Google Fonts, filtered for the Latin writing system.
 
 (Un)fortunately, fonts are virtually infinite, but these few should provide a tough enough challenge. For now.
 
