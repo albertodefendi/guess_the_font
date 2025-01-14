@@ -147,3 +147,5 @@ export default function App() {
 // TODO: capire se devo gestire i cookie
 // TODO: aggiungere la sezione di report di un bug
 // TODO: aggiungere un tasto share results
+
+// TODO: aggiungere footer
