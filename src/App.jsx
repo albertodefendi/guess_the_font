@@ -12,6 +12,7 @@ import GuessSection from "./components/GuessSection";
 import { Settings, Info, Bug } from "lucide-react";
 import { getRandomFont, appendFontToHtml, fontRegexUrl } from "./components/UtilityFunctions";
 
+const currentYear = new Date().getFullYear();
 const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
 const fontsNumber = fontsArray.length;
 const fontsDate = fonts.date;
@@ -99,7 +100,7 @@ function HomePage() {
 				</div>
 				<div className="flex justify-between mt-24 lg:mt-0">
 					<div className="flex flex-col gap-2 justify-center text-white text-sm">
-						<div>Made by:&nbsp;
+						<div>© {currentYear} | Made by:&nbsp;
 							<a href="https://albertodefendi.netlify.app" target="_blank" className="underline hover:text-custom-green">Alberto Defendi</a>
 						</div>
 						<div>v{projectVersion}</div>
