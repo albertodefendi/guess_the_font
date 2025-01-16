@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { getRandomFont, appendFontToHtml, removeFontFromHead } from "./UtilityFunctions";
 
-const title = "Guess The Font"; // h1 della pagina
+const title = "Guess The Font"; // h1
 const letters = title.split("");
 
 export default function Title({ currentGuessFont }) {
     const [fontsPerLetter, setFontsPerLetter] = useState([]);
-    const fontsRef = useRef([]); // Mantiene il riferimento ai font attuali
+    const fontsRef = useRef([]); // Keeps the reference to the current fonts
 
-    // Funzione per inizializzare i font per ogni lettera
+    // Function to initialize fonts for each letter
     const initializeFonts = () => {
         const initialFonts = letters.map((letter) => {
             const font = getRandomFont();
@@ -16,7 +16,7 @@ export default function Title({ currentGuessFont }) {
             return font;
         });
         setFontsPerLetter(initialFonts);
-        fontsRef.current = initialFonts; // Aggiorna il riferimento
+        fontsRef.current = initialFonts; // Updates the reference
     };
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function Title({ currentGuessFont }) {
 
         const interval = setInterval(() => {
             const randomIndex = Math.floor(Math.random() * letters.length);
-            const currentFonts = [...fontsRef.current]; // Recupera i font correnti
+            const currentFonts = [...fontsRef.current]; // Retrieves the current fonts
             const oldFont = currentFonts[randomIndex];
             const newFont = getRandomFont();
 
@@ -33,7 +33,7 @@ export default function Title({ currentGuessFont }) {
                 removeFontFromHead(oldFont);
             }
 
-            // Aggiorna i font nel riferimento e nello stato
+            // Update the fonts in the reference and state
             currentFonts[randomIndex] = newFont;
             fontsRef.current = currentFonts;
             setFontsPerLetter(currentFonts);
@@ -41,7 +41,7 @@ export default function Title({ currentGuessFont }) {
 
         return () => {
             clearInterval(interval);
-            fontsRef.current.forEach((font) => removeFontFromHead(font)); // Pulisci i font
+            fontsRef.current.forEach((font) => removeFontFromHead(font)); // Clears the fonts
         };
     }, []);
 

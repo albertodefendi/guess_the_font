@@ -1,28 +1,27 @@
 // Go on https://fonts.google.com/?script=Latn, order by name and paste this code on the console; it downloads a json of the fonts
 
 (async function extractAllFonts() {
-    const SCROLL_STEP = 1600; // Numero di pixel da scrollare ogni volta
-    const SCROLL_DELAY = 500; // Millisecondi di attesa tra ogni scroll
-    const MAX_SCROLLS = 2000; // Numero massimo di scroll per evitare loop infiniti
-    const fontSet = new Set(); // Set per raccogliere tutti i font unici
+    const SCROLL_STEP = 1600; // Pixels to be scrolled
+    const SCROLL_DELAY = 500; // Milliseconds of delay between each scroll
+    const MAX_SCROLLS = 2000; // Maximum number of scrolls to avoid infinite loops
+    const fontSet = new Set(); // Set to collect all unique fonts
 
-    let lastScrollPosition = 0; // Ultima posizione di scroll
+    let lastScrollPosition = 0;
     let currentScrolls = 0;
 
     while (currentScrolls < MAX_SCROLLS) {
-        // Estrai i font visibili attualmente
         document.querySelectorAll('.gf-block-anchor__text').forEach((el) => {
             const fontName = el.textContent.trim();
-            if (!fontName.toLowerCase().includes("guides")) { // Escludi i font con "guides" nel nome
+            if (!fontName.toLowerCase().includes("guides")) {
                 fontSet.add(fontName);
             }
         });
 
-        // Scrolla di SCROLL_STEP pixel
+        // Scroll by SCROLL_STEP pixels
         window.scrollBy(0, SCROLL_STEP);
         await new Promise((resolve) => setTimeout(resolve, SCROLL_DELAY));
 
-        // Controlla se lo scroll ha raggiunto il fondo della pagina
+        // Check if the scroll has reached the bottom of the page
         const currentScrollPosition = window.scrollY;
         if (currentScrollPosition === lastScrollPosition) {
             console.log("Fine dello scrolling. Nessun nuovo contenuto caricato.");
@@ -32,13 +31,13 @@
         currentScrolls++;
     }
 
-    // Crea un array di oggetti per i font con ID e nome
+    // Create an array
     const fonts = Array.from(fontSet).map((fontName, index) => ({
         id: index + 1,
         name: fontName
     }));
 
-    // Ottieni la data odierna nel formato "15 Dec 2024"
+    // Create the date to store in the json file
     const today = new Date();
     const formattedDate = today.toLocaleDateString('en-GB', {
         day: '2-digit',
@@ -46,15 +45,14 @@
         year: 'numeric'
     }).replace(/ /g, ' ');
 
-    // Struttura finale del JSON
     const fontsJson = {
-        date: formattedDate, // Aggiungi la data odierna
+        date: formattedDate,
         fonts
     };
 
     console.log('Totale font estratti:', fonts.length);
 
-    // Salva il JSON in un file
+    // Save the json in a file
     const blob = new Blob([JSON.stringify(fontsJson, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

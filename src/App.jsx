@@ -13,13 +13,13 @@ import { Settings, Info, Bug } from "lucide-react";
 import { getRandomFont, appendFontToHtml, fontRegexUrl } from "./components/UtilityFunctions";
 
 const currentYear = new Date().getFullYear();
-const fontsArray = fonts.fonts.map((font) => font.name); // Array dei nomi dei font
+const fontsArray = fonts.fonts.map((font) => font.name); // Font names array
 const fontsNumber = fontsArray.length;
 const fontsDate = fonts.date;
 
 function HomePage() {
 	const { ultraInstinct } = useUltraInstinct();
-	const [currentFont, setCurrentFont] = useState(""); // Stato per il font corrente
+	const [currentFont, setCurrentFont] = useState(""); // State for the current font
 	const [currentStreak, setCurrentStreak] = useState(() => {
 		// Inizializza da localStorage
 		const savedStreak = localStorage.getItem("currentStreak");
@@ -33,9 +33,9 @@ function HomePage() {
 	});
 	const customText = localStorage.getItem("customText");
 
-	// Inizializza i dati da localStorage al caricamento della pagina
+	// Initializes the data from localStorage on page load.
 	useEffect(() => {
-		const savedFont = localStorage.getItem("currentFont"); // Recupera il font salvato
+		const savedFont = localStorage.getItem("currentFont"); // Retrieves the saved font
 		if (savedFont) {
 			setCurrentFont(savedFont);
 			appendFontToHtml(savedFont);
@@ -46,20 +46,20 @@ function HomePage() {
 		}
 	}, []);
 
-	// Aggiorna localStorage quando cambia il font
+	// Updates local storage on font change
 	useEffect(() => {
 		if (currentFont) {
 			localStorage.setItem("currentFont", currentFont);
 		}
 	}, [currentFont]);
 
-	// Aggiorna localStorage quando le streak cambiano
+	// Updates local storage on streak change
 	useEffect(() => {
 		localStorage.setItem("currentStreak", currentStreak);
 		localStorage.setItem("highestStreak", highestStreak);
 	}, [currentStreak, highestStreak]);
 
-	// Funzione per cambiare font e aggiornare le streak
+	// Function to change the font and update the streaks
 	const handleGuess = (value) => {
 		if (!ultraInstinct && value === currentFont) {
 			setCurrentStreak((prev) => {
@@ -145,8 +145,6 @@ export default function App() {
 	);
 }
 
-// TODO: capire se devo gestire i cookie
-// TODO: aggiungere la sezione di report di un bug
-// TODO: aggiungere un tasto share results
-
-// TODO: aggiungere footer
+// TODO: figure out if I need to handle cookies
+// TODO: add the bug report section.
+// TODO: Add a "Share Results" button.

@@ -4,17 +4,17 @@ import { Check, X } from 'lucide-react';
 import { fontRegexUrl, appendFontToHtml, getRandomFont } from "./UtilityFunctions";
 
 export default function GuessSection({ fontsArray, handleGuess, currentFont, ultraInstinct }) {
-    const [query, setQuery] = useState(""); // Valore corrente dell'input
-    const [suggestions, setSuggestions] = useState([]); // Lista dei suggerimenti
-    const [suggestionsVisibility, setSuggestionsVisibility] = useState(false); // Lista dei suggerimenti
-    const [highlightedIndex, setHighlightedIndex] = useState(-1); // Indice attivo per la navigazione con tastiera
-    const [inputError, setInputError] = useState(false); // Errore per input non valido
-    const [guessCorrect, setGuessCorrect] = useState(null); // Verifica se il guess è corretto
-    const [sentGuess, setSentGuess] = useState(false);
-    const [showResults, setShowResults] = useState(false); // Controlla la visibilità dei risultati
-    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-    const inputRef = useRef(null); // Riferimento all'input
-    const listRef = useRef(null); // Riferimento alla lista dei suggerimenti
+    const [query, setQuery] = useState(""); // Current value of the input
+    const [suggestions, setSuggestions] = useState([]); // Suggestions List
+    const [suggestionsVisibility, setSuggestionsVisibility] = useState(false); // Suggestions List visibility
+    const [highlightedIndex, setHighlightedIndex] = useState(-1); // Keyboard accessible index for navigation
+    const [inputError, setInputError] = useState(false); // Active index for navigation with keyboard
+    const [guessCorrect, setGuessCorrect] = useState(null); // Verify if the guess is correct
+    const [sentGuess, setSentGuess] = useState(false); // Check if the user sent the guess input
+    const [showResults, setShowResults] = useState(false); // Check the visibility of the results
+    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false); // Check if the keyboard is open (for mobile)
+    const inputRef = useRef(null); // Reference to the input
+    const listRef = useRef(null); // Reference to the suggestions list
 
     const handleInputChange = (e) => {
         setInputError(false);
@@ -22,27 +22,27 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         const value = e.target.value;
         setQuery(value);
 
-        // Mostra suggerimenti solo se l'utente digita
+        // Show suggestions only if the user types
         if (value.length > 0) {
             const filteredFonts = fontsArray.filter((font) =>
                 font.toLowerCase().includes(value.toLowerCase())
             );
             setSuggestions(filteredFonts);
         } else {
-            setSuggestions([]); // Non mostra suggerimenti quando il campo è vuoto
+            setSuggestions([]); // Do not show suggestions when the field is empty
         }
     };
 
     const handleSuggestionClick = (suggestion) => {
         setQuery(suggestion);
-        setSuggestions([]); // Chiude la lista
+        setSuggestions([]); // Closes the list
         setSuggestionsVisibility(false);
     };
 
-    // Modifica l'onFocus per evitare di riaprire l'elenco subito dopo il clic
+    // Modify the onFocus to prevent reopening the list immediately after the click
     const handleFocus = () => {
         if (query === "" && suggestions.length === 0) {
-            setSuggestions(fontsArray); // Mostra suggerimenti solo se il campo è vuoto
+            setSuggestions(fontsArray); // Show suggestions only if the field is empty
         }
         setSuggestionsVisibility(true)
     };
@@ -50,11 +50,11 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     const handleKeyDown = (e) => {
         if (e.key === "ArrowDown") {
             setHighlightedIndex((prevIndex) =>
-                prevIndex < suggestions.length - 1 ? prevIndex + 1 : 0 // Torna al primo elemento
+                prevIndex < suggestions.length - 1 ? prevIndex + 1 : 0 // Goes to the first element
             );
         } else if (e.key === "ArrowUp") {
             setHighlightedIndex((prevIndex) =>
-                prevIndex > 0 ? prevIndex - 1 : suggestions.length - 1 // Torna all'ultimo elemento
+                prevIndex > 0 ? prevIndex - 1 : suggestions.length - 1 // Goes to the last element
             );
         } else if (e.key === "Enter" && highlightedIndex >= 0) {
             setQuery(suggestions[highlightedIndex]);
@@ -111,53 +111,49 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
         setInputError(false);
         setShowResults(false);
         setSuggestions(fontsArray)
-        handleGuess(query); // Cambia il font corrente solo dopo il guess
+        handleGuess(query);
     };
 
-    // Effetto per chiudere il menu quando si clicca fuori dal componente
+    // Effect to close the menu when clicking outside the component
     const isMobile = navigator.maxTouchPoints > 0;
     useEffect(() => {
-        // Funzione per gestire il clic fuori dal div
+        // Function to handle the click outside of the div
         const handleClickOutside = (event) => {
             if (isKeyboardOpen) {
-                return; // Non chiudere i suggerimenti se la tastiera è aperta
+                return; // Do not close suggestions if the keyboard is open (for mobile)
             }
 
-            // Verifica se il clic è fuori dall'input e dalla lista dei suggerimenti
             if (
                 inputRef.current &&
                 !inputRef.current.contains(event.target) &&
                 listRef.current &&
                 !listRef.current.contains(event.target)
             ) {
-                setSuggestions([]); // Chiudi la lista dei suggerimenti
+                setSuggestions([]);
             }
         };
 
-        // Gestire l'apertura e la chiusura della tastiera, solo su dispositivi mobili
+        // Handle keyboard open and close events, only on mobile devices
         const handleFocus = () => {
             if (isMobile) {
-                setIsKeyboardOpen(true); // La tastiera è aperta
+                setIsKeyboardOpen(true);
             }
         };
 
         const handleBlur = () => {
             if (isMobile) {
-                setIsKeyboardOpen(false); // La tastiera è chiusa
+                setIsKeyboardOpen(false);
             }
         };
 
-        // Aggiungi eventi per clic fuori dal componente
         document.addEventListener("mousedown", handleClickOutside);
 
-        // Aggiungi eventi focus e blur per rilevare l'apertura della tastiera, solo su mobile
         if (inputRef.current && isMobile) {
             inputRef.current.addEventListener("focus", handleFocus);
             inputRef.current.addEventListener("blur", handleBlur);
         }
 
         return () => {
-            // Rimuovi gli event listeners quando il componente viene smontato
             document.removeEventListener("mousedown", handleClickOutside);
             if (inputRef.current && isMobile) {
                 inputRef.current.removeEventListener("focus", handleFocus);
@@ -167,7 +163,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
     }, [isKeyboardOpen, isMobile]);
 
 
-    // Effetto per gestire lo scroll dell'elemento evidenziato
+    // Effect to manage the scroll of the highlighted element
     useEffect(() => {
         if (highlightedIndex >= 0 && listRef.current) {
             const listItem = listRef.current.children[highlightedIndex];
@@ -186,7 +182,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                 const filteredFonts = fontsArray.filter((font) =>
                     font.toLowerCase().includes(query.toLowerCase())
                 );
-                setSuggestions(filteredFonts); // Supponendo che setSuggestions sia la funzione per aggiornare lo stato
+                setSuggestions(filteredFonts);
             }
         }, 300);
         return () => clearTimeout(timeout);
@@ -209,7 +205,7 @@ export default function GuessSection({ fontsArray, handleGuess, currentFont, ult
                         value={query}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
-                        onFocus={handleFocus} // Gestisce i suggerimenti al focus
+                        onFocus={handleFocus}
                         placeholder="What's the font?"
                         disabled={sentGuess ? true : false}
                         autoComplete="off"
