@@ -11,7 +11,7 @@ with open("./src/assets/excluded_fonts.json", 'r') as excluded_fonts_file:
 # Make sure that excludedFonts is a list
 excludedFonts = excluded_fonts_data.get("excludedFonts", [])
 if not isinstance(excludedFonts, list):
-    print("Il file excluded_fonts.json non contiene una lista valida nella chiave 'excludedFonts'.")
+    print("The file excluded_fonts.json does not contain a valid list under the 'excludedFonts' key")
     exit()
 
 # Load the font file
@@ -19,14 +19,14 @@ try:
     with open('./src/assets/google_fonts_list.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
 except FileNotFoundError:
-    print("Il file google_fonts_list.json non esiste.")
+    print("The file google_fonts_list.json does not exist")
     exit()
 except json.JSONDecodeError:
-    print("Il file google_fonts_list.json non è un file JSON valido.")
+    print("The file google_fonts_list.json is not a valid JSON file")
     exit()
 
 if 'fonts' not in data or not isinstance(data['fonts'], list):
-    print("Il JSON non contiene la chiave 'fonts' o 'fonts' non è una lista.")
+    print("The JSON does not contain the 'fonts' key or 'fonts' is not a list")
     exit()
 
 # Load the modified font file
@@ -34,15 +34,15 @@ try:
     with open('./src/assets/modified_fonts.json', 'r', encoding='utf-8') as modified_fonts_file:
         modified_fonts_data = json.load(modified_fonts_file)
 except FileNotFoundError:
-    print("Il file modified_fonts.json non esiste.")
+    print("The file modified_fonts.json does not exist")
     exit()
 except json.JSONDecodeError:
-    print("Il file modified_fonts.json non è un file JSON valido.")
+    print("The file modified_fonts.json is not a valid JSON file")
     exit()
 
 modifiedFonts = modified_fonts_data.get("modifiedFonts", [])
 if not isinstance(modifiedFonts, list):
-    print("Il file modified_fonts.json non contiene una lista valida nella chiave 'modifiedFonts'.")
+    print("The file modified_fonts.json does not contain a valid list under the 'modifiedFonts' key")
     exit()
 
 # Create a dictionary for quick access to modified fonts
@@ -116,5 +116,5 @@ I mean... I literally never guessed any, so..."""
 
 
 # ! Main
-print(f"Font esclusi e JSON aggiornato con successo!\nTotale font: {len(filtered_fonts)}")
+print(f"Excluded fonts and JSON updated successfully!\nTotal number: {len(filtered_fonts)}")
 generate_md_file('./src/assets/google_fonts_list.json', 'README.md')
