@@ -1,8 +1,6 @@
 import json
 from datetime import datetime
 
-
-
 # ! Generate google_fonts_list.json while filtering and correcting names
 # Load the fonts to exclude
 with open("./src/assets/excluded_fonts.json", 'r') as excluded_fonts_file:
@@ -14,15 +12,23 @@ if not isinstance(excludedFonts, list):
     print("The file excluded_fonts.json does not contain a valid list under the 'excludedFonts' key")
     exit()
 
+# Sort excludedFonts alphabetically
+excludedFonts.sort()
+
+# Save the sorted excludedFonts back to the JSON file
+excluded_fonts_data["excludedFonts"] = excludedFonts
+with open("./src/assets/excluded_fonts.json", 'w', encoding='utf-8') as excluded_fonts_file:
+    json.dump(excluded_fonts_data, excluded_fonts_file, indent=4, ensure_ascii=False)
+
 # Load the font file
 try:
-    with open('./src/assets/google_fonts_list.json', 'r', encoding='utf-8') as f:
+    with open('./src/assets/original_google_fonts.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
 except FileNotFoundError:
-    print("The file google_fonts_list.json does not exist")
+    print("The file original_google_fonts.json does not exist")
     exit()
 except json.JSONDecodeError:
-    print("The file google_fonts_list.json is not a valid JSON file")
+    print("The file original_google_fonts.json is not a valid JSON file")
     exit()
 
 if 'fonts' not in data or not isinstance(data['fonts'], list):
@@ -70,8 +76,6 @@ data['fonts'] = filtered_fonts
 with open('./src/assets/google_fonts_list.json', 'w') as f:
     json.dump(data, f, indent=4)
 
-
-
 # ! Generate README.md file
 def generate_md_file(json_file, output_file):
     # Load data from the JSON file
@@ -113,8 +117,6 @@ I mean... I literally never guessed any, so..."""
     with open(output_file, 'w') as file:
         file.write(markdown_content)
 
-
-
 # ! Main
-print(f"Excluded fonts and JSON updated successfully!\nTotal number: {len(filtered_fonts)}")
+print(f"Excluded fonts sorted and JSON updated successfully!\nTotal number of filtered fonts: {len(filtered_fonts)}")
 generate_md_file('./src/assets/google_fonts_list.json', 'README.md')

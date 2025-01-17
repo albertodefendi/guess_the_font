@@ -10,7 +10,7 @@
     let currentScrolls = 0;
 
     while (currentScrolls < MAX_SCROLLS) {
-        document.querySelectorAll('.gf-block-anchor__text').forEach((el) => {
+        document.querySelectorAll(".gf-block-anchor__text").forEach((el) => {
             const fontName = el.textContent.trim();
             if (!fontName.toLowerCase().includes("guides")) {
                 fontSet.add(fontName);
@@ -24,7 +24,6 @@
         // Check if the scroll has reached the bottom of the page
         const currentScrollPosition = window.scrollY;
         if (currentScrollPosition === lastScrollPosition) {
-            console.log("Fine dello scrolling. Nessun nuovo contenuto caricato.");
             break;
         }
         lastScrollPosition = currentScrollPosition;
@@ -39,25 +38,25 @@
 
     // Create the date to store in the json file
     const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    }).replace(/ /g, ' ');
+    const formattedDate = today.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    }).replace(/ /g, " ");
 
     const fontsJson = {
         date: formattedDate,
         fonts
     };
 
-    console.log('Totale font estratti:', fonts.length);
+    console.log("Totale extracted fonts:", fonts.length);
 
     // Save the json in a file
-    const blob = new Blob([JSON.stringify(fontsJson, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(fontsJson, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'google_fonts.json';
+    a.download = "google_fonts.json";
     a.click();
     URL.revokeObjectURL(url);
 })();
