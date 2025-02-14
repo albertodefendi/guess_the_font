@@ -84,6 +84,7 @@ function HomePage() {
 						<div
 							className="w-full min-h-48 p-8 flex justify-center items-center text-center bg-custom-black-1 border-4 border-custom-green text-custom-violet rounded-3xl [overflow-wrap:anywhere]"
 							style={{ fontFamily: currentFont }}
+							id="Text section"
 						>
 							{customText ||
 								"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo esse accusamus quasi magni totam? Nesciunt, harum!"}
